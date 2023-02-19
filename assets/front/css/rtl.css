@@ -1,0 +1,493 @@
+.navbar-brand{
+	margin-right: 0;
+	margin-left: 1rem;
+}
+.navigation .navbar .navbar-nav .nav-item a > i{
+	padding-left: 0;
+	padding-right: 5px;
+}
+.navigation .navbar .navbar-btns .header-times,
+.navigation .navbar .navbar-nav .nav-item .sub-menu > li a{
+	text-align: right;
+}
+.navigation .navbar .navbar-btns a{
+	margin-left: 0;
+	margin-right: 60px;
+}
+.navigation .navbar .navbar-btns .header-times i{
+	left: auto;
+	right: -50px;
+}
+.banner-area .banner-thumb{
+	right: auto;
+	left: 230px;
+}
+.banner-content{
+	text-align: right;
+}
+.banner-area .banner-content ul li{
+	margin-left: 18px;
+	margin-right: 0;
+}
+.experience-area .experience-bg{
+	left: auto;
+	right: 0;
+}
+.experience-area .experience-content{
+	text-align: right;
+}
+.flag{
+	left: 0;
+	right: -110px;
+}
+.flag span{
+	margin-left: 0;
+	margin-right: -30px;
+}
+.experience-area .experience-content p{
+	padding-right: 0;
+	padding-left: 120px;
+}
+.experience-area .experience-content i{
+	left: auto;
+	right: -100px;
+}
+.menu-content {
+    margin-left: 0;
+    margin-right: 30px;
+    text-align: right;
+}
+.food-menu-area .food-menu-items .single-menu-item .menu-price-btn{
+	margin-left: 0;
+	margin-right: 135px;
+}
+.good-food-area::before{
+	left: 0;
+	right: auto;
+}
+.menu-list-content{
+	text-align: left !important;
+}
+.client-area .client-items .single-client .text{
+	text-align: right;
+}
+.client-area .client-items .single-client .client-info .item-1{
+	text-align: right;
+	padding-left: 0;
+	padding-right: 90px;
+}
+.client-area .client-items .single-client .client-info .item-1 img{
+	left: auto;
+	right: 0;
+}
+.single-blog .blog-content{
+	text-align: right;
+}
+.blog-area .blog-content .blog-comments ul li i{
+	padding-left: 7px;
+	padding-right: 0;
+}
+.reservation-2-area .white-bg form .input-box input,
+.reservation-area .reservation-item .book-table .input-box input{
+	padding-left: 0;
+	padding-right: 30px;
+}
+.footer-widget-3,
+.footer-widget-2,
+.footer-widget-1{
+	text-align: right !important;
+}
+.footer-copyright-area .footer-copyright p i{
+	padding-right: 0;
+	padding-left: 5px;
+}
+/*Home End*/
+
+/*.food-menu-2-area .menu-content{
+	margin-right: 0;
+}*/
+.food-menu-area.food-menu-2-area .food-menu-items .single-menu-item .menu-price-btn{
+	margin-right: 35px;
+	margin-left: 0;
+}
+.food-menu-area .food-menu-items .single-menu-item .menu-price-btn a{
+	left: 0;
+	right: auto;
+}
+.client-area .client-items .single-client .text p::after,
+.client-area.client-2-area .client-items .single-client .text p::after{
+	right: -25px;
+}
+
+.experience-area-3 .experience-bg::before{
+	left: auto;
+	right: 0;
+}
+.experience-area-3 .experience-bg .experience-item{
+	right: auto;
+	left: -85px;
+}
+.experience-area-3 .experience-content{
+	text-align: right;
+}
+.experience-area-3 .experience-content p{
+	padding-right: 0;
+	padding-left: 30px;
+}
+.experience-area-3 .awards-area{
+	padding-left: 0;
+	padding-right: 100px;
+}
+.experience-area-3 .awards-content{
+	padding-left: 0;
+	padding-right: 20px;
+	text-align: right;
+}
+.team-2-area::before{
+	left: auto;
+	right: 0;
+}
+.team-2-area .team-content{
+	text-align: left !important;
+}
+
+/*home end*/
+
+.page-title-area .page-title-item nav ol li i{
+	left: auto;
+	right: -50px;
+}
+.breadcrumb-item+.breadcrumb-item::before{
+	padding-right: 0;
+	padding-left: .5rem;
+}
+.breadcrumb-item+.breadcrumb-item{
+	padding-left: 0;
+	padding-right: .5rem;
+}
+/*menu details*/
+.menu-details-area .menu-content .menu-top .title{
+	padding-left: 160px;
+	padding-right: 0;
+}
+.menu-details-area .menu-content .menu-tabs .nav li a{
+	margin-right: 0;
+	margin-left: 5px;
+}
+.menu-contents .menu-tabs .tab-content .tab-pane .list,
+.menu-details-area .menu-content .menu-tabs .tab-content .tab-pane ul{
+	padding-left: 0;
+	padding-right: 40px;
+}
+.menu-contents .menu-tabs .tab-content .tab-pane .list li::before,
+.menu-details-area .menu-content .menu-tabs .tab-content .tab-pane ul li::before{
+	left: auto;
+	right: -22px;
+}
+/*shop*/
+.shop-bar-area .shop-bar ul > li span{
+	padding-right: 0;
+	padding-left: 10px;
+}
+.shop-bar-area .pagination-part nav .pagination li{
+	margin-right: 0;
+	margin-left: 10px;
+}
+.shop-details-area .shop-content{
+	text-align: right;
+}
+.shop-details-area .shop-content .shop-price ul{
+	padding-right: 0;
+	padding-left: 100px;
+}
+.shop-details-area .shop-review{
+	padding-left: 0;
+	padding-right: 40px;
+}
+.shop-details-area .shop-content .shop-btns ul{
+	padding-left: 0;
+	padding-right: 5px;
+}
+.shop-details-area .shop-content .shop-btns ul li a{
+	margin-left: 0;
+	margin-right: 10px;
+}
+.shop-menu-content .tab-pane{
+	text-align: right;
+}
+
+/*blog details*/
+.blog-details-content{
+	text-align: right;
+}
+.blog-form,
+.blog-comment{
+	text-align: right;
+}
+.single-comment .comment-author{
+	margin-left: 0;
+	margin-right: -65px;
+}
+.single-comment .comment-text{
+	padding-left: 0;
+	padding-right: 25px;
+}
+/*contact*/
+.contact-area .contact-area-info{
+	text-align: right;
+}
+.contact-area .contact-info-list .item{
+	padding-left: 0;
+	padding-right: 65px;
+}
+.contact-area .contact-info-list .item i{
+	left: auto;
+	right: 0;
+}
+/*dashboard css*/
+.user-dashbord .user-sidebar{
+	text-align: right;
+}
+.user-dashbord .account-info, .user-dashbord .order-details{
+	text-align: right;
+}
+.user-dashbord .main-info ul.list{
+	float: right;
+}
+.user-dashbord .card-box{
+	text-align: right;
+}
+.user-dashbord .card-box:after{
+	right: auto;
+	left: 0;
+}
+.dataTables_wrapper .dataTables_length{
+	float: right;
+}
+div.dataTables_wrapper div.dataTables_filter input{
+	margin-left: 0;
+	margin-right: 0.5em;
+}
+.dataTables_wrapper .dataTables_info{
+	float: right;
+}
+.dataTables_wrapper .dataTables_paginate{
+	float: left;
+}
+.user-dashbord .main-info ul.list li p span{
+	margin-right: 0;
+	margin-left: 20px;
+}
+.user-dashbord .user-profile-details .edit-info-area .form_control{
+	padding-left: 0;
+	padding-right: 23px;
+}
+.user-dashbord .user-profile-details .edit-info-area .file-upload-area{
+	margin-right: 30px;
+	margin-left: 0;
+}
+.client-area .client-items .single-client .client-info .item-2{
+	text-align: right !important;
+}
+.good-food-area .special-items .slick-arrow {
+    left: -15px;
+}
+.footer-area.footer-area-2 .footer-widget-2 {
+    text-align: center !important;
+}
+.infos {
+    text-align: right;
+}
+.infos span i {
+    margin-right: 0;
+    margin-left: 8px;
+}
+.infos span:first-child {
+    margin-right: auto;
+    margin-left: 20px;
+}
+.links {
+    text-align: left;
+}
+.links ul.social-links {
+    margin-right: 0;
+    margin-left: 30px;
+}
+.links ul.social-links li {
+    margin-right: auto;
+    margin-left: 15px;
+}
+.links ul.social-links::after {
+    right: auto;
+    left: -28px;
+}
+a.language-btn {
+    padding-right: 0;
+    padding-left: 15px;
+}
+.language {
+    margin-left: auto;
+    margin-right: 17px;
+}
+.language-btn::after {
+    left: 0;
+    right: auto;
+}
+.language a i {
+    margin-right: 0;
+    margin-left: 3px;
+}
+ul.login {
+    margin-left: auto;
+    margin-right: 43px;
+}
+ul.login::before {
+    left: auto;
+    right: -24px;
+}
+.navigation .cart {
+    margin-left: auto;
+    margin-right: 40px;
+}
+.navigation .cart::before {
+    left: auto;
+    right: -23px;
+}
+.ui-timepicker-container.ui-timepicker-no-scrollbar.ui-timepicker-standard {
+    direction: ltr;
+}
+div#ui-datepicker-div {
+    direction: ltr;
+}
+.shop-search input {
+    padding-left: 0;
+    padding-right: 20px;
+}
+.shop-search i {
+    right: auto;
+    left: 30px;
+}
+.shop-sidebar {
+    text-align: right;
+}
+.shop-sidebar .shop-box .sidebar-title .title::after {
+    left: auto;
+    right: 17px;
+}
+.shop-sidebar .shop-box .sidebar-title .title::before {
+    left: auto;
+    right: 0;
+}
+.menu-contents .menu-tabs .tab-content .tab-pane .shop-review-area .shop-review-form .input-box textarea {
+    padding-left: 0;
+    padding-right: 20px;
+}
+.login-content {
+    text-align: right;
+}
+.food-menu-area .food-menu-items .single-menu-item .menu-price-btn.menu-2 {
+    right: auto;
+    left: 80px;
+}
+h3.subscribe-title {
+    text-align: right;
+}
+h3.subscribe-title::before {
+    left: auto;
+    right: 0;
+}
+h3.subscribe-title::after {
+    left: auto;
+    right: 17px;
+}
+.subscribe-inputs button {
+    border-radius: 3px 0px 0px 3px;
+}
+.subscribe-inputs input {
+    border-radius: 0px 3px 3px 0px;
+    padding-right: 20px;
+}
+.blog-details-area .blog-sidebar .blog-box .blog-title .title {
+    text-align: right;
+}
+.flag span {
+    margin-right: -4px;
+    font-size: 24px;
+}
+.pricing-area .single-pricing .flag span {
+    font-size: 20px;
+    margin-left: -34px;
+}
+.flag.flag-2 {
+    left: auto;
+    right: -1px;
+}
+.flag.flag-2 span {
+    font-size: 18px;
+    margin-top: 16px;
+    margin-left: -7px;
+}
+@media only screen and (max-width: 1600px) and (min-width: 1200px){
+	.banner-area .banner-thumb{
+		left: 0;
+	}
+}
+@media only screen and (max-width: 1199px){
+	.food-menu-area .food-menu-items .single-menu-item .menu-price-btn.menu-2 {
+		left: auto;
+	}
+}
+@media only screen and (min-width: 992px) and (max-width: 1200px){
+	.navigation .navbar .navbar-btns .header-times i{
+		right: -38px;
+	}
+	.navigation .mr-auto, .mx-auto{
+		margin-right: 0!important;
+    	margin-left: auto !important;
+	}
+	.navigation .navbar .navbar-btns a{
+		margin-right: 10px;
+	}
+	.banner-area .banner-thumb{
+		left: 0;
+	}
+}
+@media only screen and (max-width: 1199px){
+    .links {
+        text-align: center;
+    }
+}
+@media only screen and (max-width: 991px) and (min-width: 768px){
+	.banner-area .banner-thumb{
+		left: 0;
+	}
+	.food-menu-area .food-menu-items .single-menu-item .menu-price-btn{
+		margin-right: 0;
+    }
+    .navigation .navbar .navbar-btns {
+        right: auto;
+        left: 70px;
+    }
+}
+@media (max-width: 767px){
+	.food-menu-area .food-menu-items .single-menu-item .menu-content{
+		margin-right: 0;
+	}
+	.food-menu-area .food-menu-items .single-menu-item .menu-price-btn{
+		margin-right: 0;
+		text-align: right;
+	}
+	.food-menu-area .food-menu-items .single-menu-item .menu-price-btn a{
+		left: auto;
+	}
+	.experience-area-3 .awards-area{
+		padding-right: 10px;
+	}
+	.menu-content{
+		margin-right: 0;
+    }
+    .navigation .navbar .navbar-btns {
+        right: auto;
+        left: 70px;
+    }
+}
