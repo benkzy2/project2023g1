@@ -60,7 +60,7 @@ class ForgotController extends Controller
 
             $mail = new PHPMailer(true);
 
-            $be->is_smtp = 0;
+            $be->is_smtp = 2;
             if ($be->is_smtp == 1) {
                 try {
                     //Server settings
