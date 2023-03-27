@@ -20,7 +20,7 @@
 
 @section('content')
   <div class="page-header">
-    <h4 class="page-title">Edit Category</h4>
+    <h4 class="page-title">Edit Shipping Charge</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="{{route('admin.dashboard')}}">
@@ -31,13 +31,19 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Service Page</a>
+        <a href="#">Order Management</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Edit Category</a>
+        <a href="#">Shipping Charges</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Edit</a>
       </li>
     </ul>
   </div>
@@ -45,7 +51,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <div class="card-title d-inline-block">Edit Category</div>
+          <div class="card-title d-inline-block">Edit Shipping Charge</div>
           <a class="btn btn-info btn-sm float-right d-inline-block" href="{{route('admin.shipping.index') . '?language=' . request()->input('language')}}">
             <span class="btn-label">
               <i class="fas fa-backward"></i>
@@ -85,6 +91,12 @@
               <label for="">Charge ({{$be->base_currency_text}}) **</label>
               <input type="text" class="form-control" name="charge" value="{{$shipping->charge}}" placeholder="Enter charge">
               <p id="errcharge" class="mb-0 text-danger em"></p>
+            </div>
+            <div class="form-group">
+              <label for="">Minimum Order Amount For Free Delivery ({{$be->base_currency_text}})</label>
+              <input type="text" class="form-control ltr" name="free_delivery_amount" value="{{$shipping->free_delivery_amount}}" placeholder="Enter Minimum Order Amount For Free Delivery">
+              <p class="mb-0 text-warning">If dont want 'Free Delivery' , then please leave it blank</p>
+              <p id="errfree_delivery_amount" class="mb-0 text-danger em"></p>
             </div>
 
           </form>

@@ -24,6 +24,7 @@ return [
             'BCMath',
             'ctype',
             'fileinfo',
+            'imagick',
             'mysqli',
             'openssl',
             'pdo',

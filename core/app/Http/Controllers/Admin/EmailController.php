@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\BasicExtended;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\EmailTemplate;
 use Session;
 
 class EmailController extends Controller
@@ -75,5 +76,25 @@ class EmailController extends Controller
 
         Session::flash('success', 'Mail address updated successfully!');
         return back();
+    }
+
+    public function templates() {
+        $data['templates'] = EmailTemplate::orderBy('id', 'DESC')->get();
+        return view('admin.basic.email.templates.index', $data);
+    }
+
+    public function editTemplate($id) {
+        $data['template'] = EmailTemplate::find($id);
+        return view('admin.basic.email.templates.edit', $data);
+    }
+
+    public function templateUpdate(Request $request, $id) {
+        $template = EmailTemplate::find($id);
+        $template->email_subject = $request->email_subject;
+        $template->email_body = $request->email_body;
+        $template->save();
+
+        Session::flash('success', 'Email Template updated successfully!');
+        return "success";
     }
 }

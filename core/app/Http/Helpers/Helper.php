@@ -1,6 +1,7 @@
 <?php
 
-use App\Page;
+use App\Models\Page;
+use App\Models\Product;
 
 if (!function_exists('setEnvironmentValue')) {
     function setEnvironmentValue(array $values)
@@ -114,6 +115,25 @@ if (!function_exists('slug_create')) {
     }
 }
 
+if (!function_exists('hex2rgb') ) {
+    function hex2rgb( $colour ) {
+        if ( $colour[0] == '#' ) {
+                $colour = substr( $colour, 1 );
+        }
+        if ( strlen( $colour ) == 6 ) {
+                list( $r, $g, $b ) = array( $colour[0] . $colour[1], $colour[2] . $colour[3], $colour[4] . $colour[5] );
+        } elseif ( strlen( $colour ) == 3 ) {
+                list( $r, $g, $b ) = array( $colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2] );
+        } else {
+                return false;
+        }
+        $r = hexdec( $r );
+        $g = hexdec( $g );
+        $b = hexdec( $b );
+        return array( 'red' => $r, 'green' => $g, 'blue' => $b );
+    }
+}
+
 
 if (!function_exists('getHref')) {
     function getHref($link)
@@ -122,28 +142,30 @@ if (!function_exists('getHref')) {
 
         if ($link["type"] == 'home') {
             $href = route('front.index');
-        } else if ($link["type"] == 'services') {
-            $href = route('front.services');
-        } else if ($link["type"] == 'packages') {
-            $href = route('front.packages');
-        } else if ($link["type"] == 'portfolios') {
-            $href = route('front.portfolios');
+        } else if ($link["type"] == 'menu_1') {
+            $href = route('front.product');
+        } else if ($link["type"] == 'menu_2') {
+            $href = route('front.product');
+        } else if ($link["type"] == 'items') {
+            $href = route('front.items');
         } else if ($link["type"] == 'team') {
             $href = route('front.team');
         } else if ($link["type"] == 'career') {
             $href = route('front.career');
-        } else if ($link["type"] == 'calendar') {
-            $href = route('front.calendar');
         } else if ($link["type"] == 'gallery') {
             $href = route('front.gallery');
         } else if ($link["type"] == 'faq') {
             $href = route('front.faq');
         } else if ($link["type"] == 'blogs') {
             $href = route('front.blogs');
-        } else if ($link["type"] == 'rss') {
-            $href = route('front.rss');
         } else if ($link["type"] == 'contact') {
             $href = route('front.contact');
+        } else if ($link["type"] == 'cart') {
+            $href = route('front.cart');
+        } else if ($link["type"] == 'checkout') {
+            $href = route('front.checkout');
+        } else if ($link["type"] == 'reservation') {
+            $href = route('front.reservation');
         } else if ($link["type"] == 'custom') {
             if (empty($link["href"])) {
                 $href = "#";
@@ -153,7 +175,11 @@ if (!function_exists('getHref')) {
         } else {
             $pageid = (int) $link["type"];
             $page = Page::find($pageid);
-            $href = route('front.dynamicPage', [$page->slug, $page->id]);
+            if (!empty($page)) {
+                $href = route('front.dynamicPage', [$page->slug, $page->id]);
+            } else {
+                $href = "#";
+            }
         }
 
         return $href;
@@ -165,19 +191,17 @@ if (!function_exists('getHref')) {
 if (!function_exists('create_menu')) {
     function create_menu($arr)
     {
-        echo '<ul style="z-index: 0;">';
+        echo '<ul class="sub-menu">';
+
         foreach ($arr["children"] as $el) {
 
             // determine if the class is 'submenus' or not
-            $class = null;
+            $class = 'class="nav-item"';
             if (array_key_exists("children", $el)) {
-                $class = 'class="submenus"';
+                $class = 'class="nav-item submenus"';
             }
-
-
             // determine the href
             $href = getHref($el);
-
 
             echo '<li ' . $class . '>';
             echo '<a  href="' . $href . '" target="' . $el["target"] . '">' . $el["text"] . '</a>';
@@ -187,5 +211,88 @@ if (!function_exists('create_menu')) {
             echo '</li>';
         }
         echo '</ul>';
+
+    }
+}
+
+
+if (!function_exists('cartTotal')) {
+    function cartTotal()
+    {
+        $total = 0;
+        if (session()->has('cart') && !empty(session()->get('cart'))) {
+            $cart = session()->get('cart');
+            foreach ($cart as $key => $cartItem) {
+                $total += $cartItem['total'];
+            }
+        }
+
+        return round($total, 2);
+    }
+}
+
+if (!function_exists('posCartSubTotal')) {
+    function posCartSubTotal()
+    {
+        $total = 0;
+        if (session()->has('pos_cart') && !empty(session()->get('pos_cart'))) {
+            $cart = session()->get('pos_cart');
+            foreach ($cart as $key => $cartItem) {
+                $total += $cartItem['total'];
+            }
+        }
+
+        return round($total, 2);
+    }
+}
+
+
+if (!function_exists('tax')) {
+    function tax()
+    {
+        $tax = 0;
+        if (session()->has('cart') && !empty(session()->get('cart'))) {
+            $cart = session()->get('cart');
+            foreach ($cart as $key => $cartItem) {
+                $product = Product::find($cartItem['id']);
+                $category = $product->category;
+                $cTax = $category->tax;
+
+                $tax += ($cTax * $cartItem['total']) / 100;
+            }
+        }
+
+        return round($tax, 2);
+    }
+}
+
+if (!function_exists('posTax')) {
+    function posTax()
+    {
+        $tax = 0;
+        if (session()->has('pos_cart') && !empty(session()->get('pos_cart'))) {
+            $cart = session()->get('pos_cart');
+            foreach ($cart as $key => $cartItem) {
+                $product = Product::find($cartItem['id']);
+                $category = $product->category;
+                $cTax = $category->tax;
+
+                $tax += ($cTax * $cartItem['total']) / 100;
+            }
+        }
+
+        return round($tax, 2);
+    }
+}
+
+if (!function_exists('posShipping')) {
+    function posShipping()
+    {
+        $shipping = 0;
+        if (session()->has('pos_shipping_charge') && !empty(session()->get('pos_shipping_charge'))) {
+            $shipping = session()->get('pos_shipping_charge');
+        }
+
+        return round($shipping, 2);
     }
 }

@@ -59,11 +59,14 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="form-group">
-                      <div class="col-12 mb-2">
+                      <div class="mb-2">
                         <label for="image"><strong>Image</strong></label>
                       </div>
-                      <div class="col-md-12 showImage mb-3">
-                        <img src="{{$data->image ? asset('assets/front/img/category/'.$data->image) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
+                      <div class="showImage mb-3">
+                        @if (!empty($data->image))
+                          <a class="remove-image" data-type="pcategory"><i class="far fa-times-circle"></i></a>
+                        @endif
+                        <img src="{{!empty($data->image) ? asset('assets/front/img/category/'.$data->image) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
                       </div>
                       <input type="file" name="image" id="image" class="form-control image">
                       <p id="errimage" class="mb-0 text-danger em"></p>
@@ -74,6 +77,11 @@
                   <label for="">Name **</label>
                   <input type="text" class="form-control" name="name" value="{{$data->name}}" placeholder="Enter name">
                   <p id="errname" class="mb-0 text-danger em"></p>
+                </div>
+                <div class="form-group">
+                  <label for="">Tax</label>
+                  <input type="text" class="form-control" name="tax" value="{{$data->tax}}" placeholder="Enter tax in %" autocomplete="off">
+                  <p id="errtax" class="mb-0 text-danger em"></p>
                 </div>
                 <input type="hidden" name="category_id" value="{{$data->id}}">
 
@@ -103,4 +111,35 @@
     </div>
   </div>
 
+@endsection
+
+@section('scripts')
+<script>
+$(function ($) {
+  "use strict";
+
+    $(".remove-image").on('click', function(e) {
+        e.preventDefault();
+        $(".request-loader").addClass("show");
+
+        let type = $(this).data('type');
+        let fd = new FormData();
+        fd.append('type', type);
+        fd.append('pcategory_id', {{$data->id}});
+
+        $.ajax({
+            url: "{{route('admin.pcategory.rmv.img')}}",
+            data: fd,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data == "success") {
+                    window.location = "{{url()->current() . '?language=' . $data->language->code}}";
+                }
+            }
+        })
+    });
+});
+</script>
 @endsection

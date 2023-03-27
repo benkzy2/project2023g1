@@ -2,7 +2,7 @@
 
 @section('content')
   <div class="page-header">
-    <h4 class="page-title">Users</h4>
+    <h4 class="page-title">Admins</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="{{route('admin.dashboard')}}">
@@ -13,13 +13,13 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Users Management</a>
+        <a href="#">Admins Management</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Users</a>
+        <a href="#">Admins</a>
       </li>
     </ul>
   </div>
@@ -28,7 +28,7 @@
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title d-inline-block">Users</div>
+          <div class="card-title d-inline-block">Admins</div>
           <a href="#" class="btn btn-primary float-right" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus"></i> Add User</a>
         </div>
         <div class="card-body">
@@ -38,7 +38,7 @@
                 <h3 class="text-center">NO USER FOUND</h3>
               @else
                 <div class="table-responsive">
-                  <table class="table table-striped mt-3">
+                  <table class="table table-striped mt-3" id="basic-datatables">
                     <thead>
                       <tr>
                         <th scope="col">#</th>

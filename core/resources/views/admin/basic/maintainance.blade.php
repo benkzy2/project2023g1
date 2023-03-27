@@ -13,7 +13,7 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Basic Settings</a>
+        <a href="#">Settings</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
@@ -33,7 +33,7 @@
           <div class="card-body pt-5 pb-5">
             <div class="row">
               <div class="col-lg-6 offset-lg-3">
-                <form  action="{{route('admin.maintainance.update')}}" method="post" enctype="multipart/form-data">
+                <form  action="{{route('admin.maintainance.update')}}" method="post" enctype="multipart/form-data" id="maintenanceForm">
                   @csrf
                   <div class="row">
                     <div class="col-lg-6">
@@ -73,14 +73,20 @@
                       <p class="mb-0 text-danger">{{$errors->first('maintainance_text')}}</p>
                     @endif
                   </div>
-                  <div class="card-footer">
-                    <div class="form-group from-show-notify row">
-                      <div class="col-12 text-center">
-                        <button type="submit"  class="btn btn-success">Update</button>
-                      </div>
-                    </div>
+                  <div class="form-group">
+                    <label>Allowed IP Addresses</label>
+                    <input name="ips" type="text" class="form-control" data-role="tagsinput" value="{{$bs->ips}}">
+                    <p class="text-warning">Maintenance Mode won't be applied to these IP Addresses</p>
                   </div>
+
                 </form>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="form-group from-show-notify row">
+              <div class="col-12 text-center">
+                <button type="submit"  class="btn btn-success" form="maintenanceForm">Update</button>
               </div>
             </div>
           </div>

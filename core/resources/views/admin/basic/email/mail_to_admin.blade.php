@@ -13,7 +13,7 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Basic Settings</a>
+        <a href="#">Settings</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>

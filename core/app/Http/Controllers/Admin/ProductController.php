@@ -22,7 +22,7 @@ class ProductController extends Controller
         $lang = Language::where('code', $request->language)->first();
 
         $lang_id = $lang->id;
-        $data['products'] = Product::where('language_id', $lang_id)->orderBy('id', 'DESC')->paginate(10);
+        $data['products'] = Product::where('language_id', $lang_id)->orderBy('id', 'DESC')->get();
         $data['lang_id'] = $lang_id;
         return view('admin.product.index',$data);
     }
@@ -90,6 +90,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
         $img = $request->file('feature_image');
         $allowedExts = array('jpg', 'png', 'jpeg');
         $slug = make_slug($request->title);
@@ -98,7 +99,6 @@ class ProductController extends Controller
             'language_id' => 'required',
             'title' => 'required|max:255',
             'category_id' => 'required',
-            'stock' => 'required',
             'current_price' => 'required',
             'summary' => 'required',
             'description' => 'required',
@@ -116,6 +116,7 @@ class ProductController extends Controller
                 },
             ],
         ];
+
 
         $messages = [
             'language_id.required' => 'The language field is required',
@@ -141,6 +142,40 @@ class ProductController extends Controller
         $in['language_id'] = $request->language_id;
         $in['slug'] = $slug;
         $in['description'] = Purifier::clean($request->description);
+
+        // store varations as json
+        $variations = [];
+        if ($request->has('variant_names')) {
+            $i = 0;
+            foreach ($request->variant_names as $key => $vname) {
+                // if the variant name input field contains value
+                if (!empty($vname)) {
+                    $variations[$i]['name'] = $vname;
+                    $vprice = $request->variant_prices[$key];
+                    $variations[$i]['price'] = !empty($vprice) ? (float)$vprice : 0;
+                    $i++;
+                }
+            }
+        }
+
+        $in['variations'] = json_encode($variations);
+
+        // store addons as json
+        $addons = [];
+        if ($request->has('addon_names')) {
+            $i = 0;
+            foreach ($request->addon_names as $key => $aname) {
+                // if the addon name input field contains value
+                if (!empty($aname)) {
+                    $addons[$i]['name'] = $aname;
+                    $aprice = $request->addon_prices[$key];
+                    $addons[$i]['price'] = !empty($aprice) ? (float)$aprice : 0;
+                    $i++;
+                }
+            }
+        }
+
+        $in['addons'] = json_encode($addons);
 
         $product = Product::create($in);
 
@@ -170,6 +205,32 @@ class ProductController extends Controller
         return $images;
     }
 
+    public function variants($pid) {
+        $variations = Product::find($pid)->variations;
+        $variations = json_decode($variations, true);
+
+        $variants = [];
+        for ($i=0; $i < count($variations); $i++) {
+            $variants[$i]['uniqid'] = uniqid();
+            $variants[$i]['name'] = $variations[$i]["name"];
+            $variants[$i]['price'] = $variations[$i]["price"];
+        }
+        return response()->json($variants);
+    }
+
+    public function addons($pid) {
+        $addons = Product::find($pid)->addons;
+        $addonArr = json_decode($addons, true);
+
+        $addons = [];
+        for ($i=0; $i < count($addonArr); $i++) {
+            $addons[$i]['uniqid'] = uniqid();
+            $addons[$i]['name'] = $addonArr[$i]["name"];
+            $addons[$i]['price'] = $addonArr[$i]["price"];
+        }
+        return response()->json($addons);
+    }
+
     public function update(Request $request)
     {
         $img = $request->file('feature_image');
@@ -180,7 +241,6 @@ class ProductController extends Controller
 
             'title' => 'required|max:255',
             'category_id' => 'required',
-            'stock' => 'required',
             'current_price' => 'required',
             'summary' => 'required',
             'description' => 'required',
@@ -222,6 +282,42 @@ class ProductController extends Controller
 
         $in['slug'] = $slug;
         $in['description'] = Purifier::clean($request->description);
+
+        $variations = [];
+        if ($request->has('variant_names')) {
+            $i = 0;
+            foreach ($request->variant_names as $key => $vname) {
+                // if the variant name input field contains value
+                if (!empty($vname)) {
+                    $variations[$i]['name'] = $vname;
+                    $vprice = $request->variant_prices[$key];
+                    $variations[$i]['price'] = !empty($vprice) ? (float)$vprice : 0;
+                    $i++;
+                }
+            }
+
+            $in['variations'] = json_encode($variations);
+        } else {
+            $in['variations'] = NULL;
+        }
+
+        // store addons as json
+        $addons = [];
+        if ($request->has('addon_names')) {
+            $i = 0;
+            foreach ($request->addon_names as $key => $aname) {
+                // if the addon name input field contains value
+                if (!empty($aname)) {
+                    $addons[$i]['name'] = $aname;
+                    $aprice = $request->addon_prices[$key];
+                    $addons[$i]['price'] = !empty($aprice) ? (float)$aprice : 0;
+                    $i++;
+                }
+            }
+            $in['addons'] = json_encode($addons);
+        } else {
+            $in['addons'] = NULL;
+        }
 
         $product = $product->fill($in)->save();
 
@@ -270,34 +366,30 @@ class ProductController extends Controller
     }
 
 
-    public function FeatureCheck($data)
+    public function FeatureCheck(Request $request)
     {
-        $info = explode(',',$data);
-        $id = $info[0];
-        $value = $info[1];
+        $id = $request->product_id;
+        $value = $request->feature;
 
+        $product = Product::findOrFail($id);
+        $product->is_feature = $value;
+        $product->save();
 
-        Product::where('id',$id)->update([
-        'is_feature' => $value
-        ]);
-
-        Session::flash('success', 'Product Update successfully!');
-        return 'done';
+        Session::flash('success', 'Product updated successfully!');
+        return back();
     }
 
 
-    public function SpecialCheck($data)
+    public function SpecialCheck(Request $request)
     {
-        $info = explode(',',$data);
-        $id = $info[0];
-        $value = $info[1];
+        $id = $request->product_id;
+        $value = $request->special;
 
+        $product = Product::findOrFail($id);
+        $product->is_special = $value;
+        $product->save();
 
-        Product::where('id',$id)->update([
-        'is_special' => $value
-        ]);
-
-        Session::flash('success', 'Product Update successfully!');
-        return 'done';
+        Session::flash('success', 'Product updated successfully!');
+        return back();
     }
 }

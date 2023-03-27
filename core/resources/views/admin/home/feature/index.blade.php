@@ -13,6 +13,12 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Home Page</a>
       </li>
       <li class="separator">
@@ -54,7 +60,7 @@
                 <h3 class="text-center">NO FEATURE FOUND</h3>
               @else
                 <div class="table-responsive">
-                  <table class="table table-striped mt-3">
+                  <table class="table table-striped mt-3" id="basic-datatables">
                     <thead>
                       <tr>
                         <th scope="col">#</th>

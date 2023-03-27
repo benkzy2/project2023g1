@@ -9,10 +9,7 @@ class TableBook extends Model
     protected $fillable = [
         'name',
         'email',
-        'phone',
-        'date',
-        'time',
-        'person',
+        'fields',
         'status',
     ];
 }

@@ -29,6 +29,12 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Home Page</a>
       </li>
       <li class="separator">
@@ -95,50 +101,114 @@
                 </div>
 
 
-                <div class="form-group">
-                  <label for="">Title **</label>
-                  <input type="text" class="form-control" name="title" value="{{$slider->title}}" placeholder="Enter Title">
-                  <p id="errtitle" class="text-danger mb-0 em"></p>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label for="">Title **</label>
+                          <input type="text" class="form-control" name="title" value="{{$slider->title}}" placeholder="Enter Title">
+                          <p id="errtitle" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label>Title Font Size **</label>
+                          <input class="form-control ltr" name="title_font_size" value="{{$slider->title_font_size}}">
+                          <p id="errtitle_font_size" class="mb-0 text-danger em"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label>Title Color Code **</label>
-                  <input class="jscolor form-control ltr" name="title_color" value="{{$slider->title_color}}">
-                  <p id="title_color" class="mb-0 text-danger em"></p>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                          <label>Title Color Code **</label>
+                          <input class="jscolor form-control ltr" name="title_color" value="{{$slider->title_color}}">
+                          <p id="errtitle_color" class="mb-0 text-danger em"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="">Text **</label>
-                  <input type="text" class="form-control" name="text" value="{{$slider->text}}" placeholder="Enter Text">
-                  <p id="errtext" class="text-danger mb-0 em"></p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label for="">Text **</label>
+                          <input type="text" class="form-control" name="text" value="{{$slider->text}}" placeholder="Enter Text">
+                          <p id="errtext" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Text Font Size **</label>
+                            <input type="text" class="form-control ltr" name="text_font_size" value="{{$slider->text_font_size}}" placeholder="Enter Text">
+                            <p id="errtext_font_size" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label>Text Color Code **</label>
-                  <input class="jscolor form-control ltr" name="text_color" value="{{$slider->text_color}}">
-                  <p id="text_color" class="mb-0 text-danger em"></p>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                          <label>Text Color Code **</label>
+                          <input class="jscolor form-control ltr" name="text_color" value="{{$slider->text_color}}">
+                          <p id="errtext_color" class="mb-0 text-danger em"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="">Button Text 1</label>
-                  <input type="text" class="form-control" name="button_text" value="{{$slider->button_text}}" placeholder="Enter Button Text">
-                  <p id="errbutton_text" class="text-danger mb-0 em"></p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label for="">Button 1 Text</label>
+                          <input type="text" class="form-control" name="button_text" value="{{$slider->button_text}}" placeholder="Enter Button Text">
+                          <p id="errbutton_text" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label for="">Button 1 Text Font Size **</label>
+                          <input type="text" class="form-control ltr" name="button_text_font_size" value="{{$slider->button_text_font_size}}" placeholder="Enter Button Text">
+                          <p id="errbutton_text_font_size" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="">Button URL 1</label>
-                  <input type="text" class="form-control ltr" name="button_url" value="{{$slider->button_url}}" placeholder="Enter Button URL">
-                  <p id="errbutton_url" class="text-danger mb-0 em"></p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label for="">Button 1 URL</label>
+                          <input type="text" class="form-control ltr" name="button_url" value="{{$slider->button_url}}" placeholder="Enter Button URL">
+                          <p id="errbutton_url" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label>Button 1 Color Code **</label>
+                          <input class="jscolor form-control ltr" name="button_color" value="{{$slider->button_color}}">
+                          <p id="button_color" class="mb-0 text-danger em"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="">Button Text 2</label>
-                  <input type="text" class="form-control" name="button_text1" value="{{$slider->button_text1}}" placeholder="Enter Button Text">
-                  <p id="errbutton_text1" class="text-danger mb-0 em"></p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label for="">Button 2 Text</label>
+                          <input type="text" class="form-control" name="button_text1" value="{{$slider->button_text1}}" placeholder="Enter Button Text">
+                          <p id="errbutton_text1" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                          <label for="">Button 2 Text Font Size **</label>
+                          <input type="text" class="form-control ltr" name="button_text1_font_size" value="{{$slider->button_text1_font_size}}" placeholder="Enter Button Text">
+                          <p id="errbutton_text1_font_size" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="">Button URL 2</label>
-                  <input type="text" class="form-control ltr" name="button_url1" value="{{$slider->button_url1}}" placeholder="Enter Button URL">
-                  <p id="errbutton_url1" class="text-danger mb-0 em"></p>
-                </div>
-                <div class="form-group">
-                  <label>Button Color Code **</label>
-                  <input class="jscolor form-control ltr" name="button_color" value="{{$slider->button_color}}">
-                  <p id="button_color" class="mb-0 text-danger em"></p>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                          <label for="">Button URL 2</label>
+                          <input type="text" class="form-control ltr" name="button_url1" value="{{$slider->button_url1}}" placeholder="Enter Button URL">
+                          <p id="errbutton_url1" class="text-danger mb-0 em"></p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">

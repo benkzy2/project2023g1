@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Events\WaiterCalled;
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\MegaMailer;
 use Illuminate\Http\Request;
 use App\Models\Slider;
 use App\Models\Feature;
@@ -14,13 +16,17 @@ use App\Models\TableBook;
 use App\Models\Bcategory;
 use App\Models\Blog;
 use App\Models\BasicExtended as BE;
+use App\Models\Faq;
 use PHPMailer\PHPMailer\PHPMailer;
 use Config;
 use Session;
 use App\Models\Gallery;
+use App\Models\Jcategory;
+use App\Models\Job;
 use App\Models\Product;
 use App\Models\Pcategory;
 use App\Models\Page;
+use App\Models\ReservationInput;
 use App\Models\Subscriber;
 use Validator;
 
@@ -51,6 +57,8 @@ class FrontendController extends Controller
             $currentLang = Language::where('is_default', 1)->first();
         }
         $lang_id = $currentLang->id;
+        $bs = $currentLang->basic_setting;
+        $be = $currentLang->basic_extended;
 
         $data['sliders'] = Slider::where('language_id', $lang_id)->orderBy('serial_number', 'ASC')->get();
         $data['features'] = Feature::where('language_id', $lang_id)->get();
@@ -61,6 +69,9 @@ class FrontendController extends Controller
         $data['categories'] = Pcategory::where('status', 1)->where('is_feature', 1)->where('language_id', $currentLang->id)->get();
 
         $data['products'] = Product::where('language_id', $lang_id)->where('status', 1)->paginate(10);
+
+        $data['shapeImg'] = $bs->home_version == 'slider' ? $be->slider_shape_img : $be->hero_shape_img;
+        $data['bottomImg'] = $bs->home_version == 'slider' ? $be->slider_bottom_img : $be->hero_bottom_img;
 
         return view('front.index', $data);
     }
@@ -86,11 +97,21 @@ class FrontendController extends Controller
 
     public function reservationForm()
     {
+        if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+        $bs = $currentLang->basic_setting;
         $bs = BS::first();
-        if ($bs->is_quote == 1)
-            return view('front.reservation');
-        else {
-            return redirect(route('front.index'));
+
+        if ($bs->is_quote == 0) {
+            return view('errors.404');
+        }
+
+        $data['inputs'] = ReservationInput::where('language_id', $currentLang->id)->orderBy('order_number', 'ASC')->get();
+        if ($bs->is_quote == 1) {
+            return view('front.reservation', $data);
         }
     }
 
@@ -104,6 +125,7 @@ class FrontendController extends Controller
         }
 
         $bs = $currentLang->basic_setting;
+        $reservation_inputs = $currentLang->reservation_inputs;
 
         $messages = [
             'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
@@ -113,11 +135,13 @@ class FrontendController extends Controller
         $rules = [
             'name' => 'required',
             'email' => 'required|email',
-            'phone' => 'required',
-            'date' => 'required',
-            'person' => 'required',
-            'time' => 'required',
         ];
+
+        foreach ($reservation_inputs as $input) {
+            if ($input->required == 1) {
+                $rules["$input->name"] = 'required';
+            }
+        }
 
         if ($bs->is_recaptcha == 1 && empty($request->type)) {
             $rules['g-recaptcha-response'] = 'required|captcha';
@@ -125,9 +149,33 @@ class FrontendController extends Controller
 
         $request->validate($rules, $messages);
 
+        $fields = [];
+        foreach ($reservation_inputs as $key => $input) {
+            $in_name = $input->name;
+            if ($request["$in_name"]) {
+                $fields["$in_name"] = $request["$in_name"];
+            }
+        }
+        $jsonfields = json_encode($fields);
+        $jsonfields = str_replace("\/","/",$jsonfields);
+
         $data = new TableBook;
-        $data->create($request->all());
-        Session::flash('success', 'Booking request sent successfully. We will contact you soon.');
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->fields = $jsonfields;
+
+        $data->save();
+
+        $mailer = new MegaMailer();
+        $data = [
+            'fromMail' => $request->email,
+            'fromName' => $request->name,
+            'subject' => 'Table Reservation Request',
+            'body' => 'You have received a new table reservation request'
+        ];
+        $mailer->mailToAdmin($data);
+
+        Session::flash('success', 'Reservation request sent successfully. We will contact you soon.');
         return back();
     }
 
@@ -138,11 +186,6 @@ class FrontendController extends Controller
             $currentLang = Language::where('code', session()->get('lang'))->first();
         } else {
             $currentLang = Language::where('is_default', 1)->first();
-        }
-
-        $bs = $currentLang->basic_setting;
-        if ($bs->blog_page == 0) {
-            return view('errors.404');
         }
 
         $data['currentLang'] = $currentLang;
@@ -193,10 +236,6 @@ class FrontendController extends Controller
             $currentLang = Language::where('code', session()->get('lang'))->first();
         } else {
             $currentLang = Language::where('is_default', 1)->first();
-        }
-        $bs = $currentLang->basic_setting;
-        if ($bs->contact_page == 0) {
-            return view('errors.404');
         }
 
         $data['contact'] = BS::where('language_id', $currentLang->id)->select(
@@ -264,6 +303,62 @@ class FrontendController extends Controller
     }
 
 
+    public function career(Request $request)
+    {
+        if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+
+        $data['jcats'] = $currentLang->jcategories()->where('status', 1)->orderBy('serial_number', 'ASC')->get();
+
+
+        $category = $request->category;
+        $term = $request->term;
+
+        if (!empty($category)) {
+            $data['category'] = Jcategory::findOrFail($category);
+        }
+
+        $data['jobs'] = Job::when($category, function ($query, $category) {
+            return $query->where('jcategory_id', $category);
+        })->when($term, function ($query, $term) {
+            return $query->where('title', 'like', '%' . $term . '%');
+        })->when($currentLang, function ($query, $currentLang) {
+            return $query->where('language_id', $currentLang->id);
+        })->orderBy('serial_number', 'ASC')->paginate(4);
+
+        $data['jobscount'] = Job::when($currentLang, function ($query, $currentLang) {
+            return $query->where('language_id', $currentLang->id);
+        })->count();
+
+        return view('front.career', $data);
+    }
+
+
+    public function careerdetails($slug, $id)
+    {
+        if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+
+        $data['jcats'] = $currentLang->jcategories()->where('status', 1)->orderBy('serial_number', 'ASC')->get();
+
+        $data['job'] = Job::findOrFail($id);
+
+        $data['jobscount'] = Job::when($currentLang, function ($query, $currentLang) {
+                                    return $query->where('language_id', $currentLang->id);
+                                })->count();
+
+
+        return view('front.career-details', $data);
+
+    }
+
+
     public function gallery()
     {
         if (session()->has('lang')) {
@@ -272,15 +367,25 @@ class FrontendController extends Controller
             $currentLang = Language::where('is_default', 1)->first();
         }
 
-        $bs = $currentLang->basic_setting;
-        if ($bs->gallery_page == 0) {
-            return view('errors.404');
-        }
-
         $lang_id = $currentLang->id;
 
         $data['galleries'] = Gallery::where('language_id', $lang_id)->orderBy('serial_number', 'ASC')->get();
         return view('front.gallery', $data);
+    }
+
+    public function faq()
+    {
+        if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+
+        $lang_id = $currentLang->id;
+
+        $data['faqs'] = Faq::where('language_id', $lang_id)->orderBy('serial_number', 'ASC')->get();
+
+        return view('front.faq', $data);
     }
 
 
@@ -290,11 +395,6 @@ class FrontendController extends Controller
             $currentLang = Language::where('code', session()->get('lang'))->first();
         } else {
             $currentLang = Language::where('is_default', 1)->first();
-        }
-
-        $bs = $currentLang->basic_setting;
-        if ($bs->team_page == 0) {
-            return view('errors.404');
         }
 
         $data['members'] = Member::when($currentLang, function ($query, $currentLang) {
@@ -317,11 +417,26 @@ class FrontendController extends Controller
         return view('front.dynamic', $data);
     }
 
-    public function changeLanguage($lang)
+    public function changeLanguage($lang, $type = 'website')
     {
         session()->put('lang', $lang);
         app()->setLocale($lang);
 
-        return redirect()->route('front.index');
+        if ($type == 'qr') {
+            return redirect()->route('front.qrmenu');
+        } else {
+            return redirect()->route('front.index');
+        }
+    }
+
+    public function callwaiter(Request $request) {
+        $request->validate([
+            'table' => 'required'
+        ]);
+
+        event(new WaiterCalled($request->table));
+
+        Session::flash('success', __('Restaurant is informed!'));
+        return back();
     }
 }

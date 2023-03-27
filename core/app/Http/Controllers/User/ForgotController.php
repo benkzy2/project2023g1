@@ -60,7 +60,7 @@ class ForgotController extends Controller
 
             $mail = new PHPMailer(true);
 
-            $be->is_smtp = 2;
+            $be->is_smtp = 0;
             if ($be->is_smtp == 1) {
                 try {
                     //Server settings
@@ -71,6 +71,13 @@ class ForgotController extends Controller
                     $mail->Password   = $be->smtp_password;                               // SMTP password
                     $mail->SMTPSecure = $be->encryption;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
                     $mail->Port       = $be->smtp_port;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+                    $mail->SMTPOptions = array(
+                        'ssl' => array(
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true
+                        )
+                    );
 
                     //Recipients
                     $mail->setFrom($be->from_mail, $be->from_name);
@@ -106,4 +113,5 @@ class ForgotController extends Controller
             return back();
         }
     }
+
 }

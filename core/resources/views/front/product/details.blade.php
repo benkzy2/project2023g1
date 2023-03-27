@@ -3,7 +3,7 @@
 @section('content')
     <!--====== PAGE TITLE PART START ======-->
 
-    <section class="page-title-area d-flex align-items-center" style="background-image:url('{{asset('assets/front/img/'.$bs->breadcrumb)}}')">
+    <section class="page-title-area d-flex align-items-center lazy" data-bg="{{asset('assets/front/img/'.$bs->breadcrumb)}}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -32,14 +32,14 @@
                         <div class="shop-thumb">
                             @foreach ($product->product_images as $image)
                             <div class="item">
-                                <img src="{{asset('assets/front/img/product/sliders/'.$image->image)}}" alt="shop">
+                                <img class="lazy wow fadeIn" data-src="{{asset('assets/front/img/product/sliders/'.$image->image)}}" alt="shop" data-wow-delay=".5s">
                             </div>
                             @endforeach
                         </div>
                         <div class="shop-list">
                             <ul class="shop-thumb-active">
                                 @foreach ($product->product_images as $img)
-                                <li><img src="{{asset('assets/front/img/product/sliders/'.$img->image)}}" alt="shop"></li>
+                                <li><img class="lazy wow fadeIn" data-src="{{asset('assets/front/img/product/sliders/'.$img->image)}}" alt="shop" data-wow-delay=".5s"></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -65,31 +65,17 @@
                                 <li>{{$be->base_currency_symbol_position == 'left' ? $be->base_currency_symbol : ''}}{{convertUtf8($product->previous_price)}}{{$be->base_currency_symbol_position == 'right' ? $be->base_currency_symbol : ''}}</li>
                                 @endif
                             </ul>
-                            <span>{{__('Availability')}} :
-                                @if($product->stock != 0)
-                                <span class='text-success'>{{__('IN STOCK')}}</span>
-                                @else
-                                <span class='text-danger'>{{__('OUT OF STOCK')}}</span>
-                                @endif
-                        </span>
                         </div>
-                        <div class="shop-qty d-flex align-items-center pt-25">
-                            <div class="product-quantity d-flex align-items-center" id="quantity">
-                                <span>{{__('Qty')}}</span>
-                                <button type="button" id="sub" class="sub subclick">-</button>
-                                <input type="text" class="cart-amount" id="1" value="1" />
-                                <button type="button" id="add" class="add addclick">+</button>
+                        @if (empty($product->variations) && empty($product->addons))
+                            <div class="shop-qty d-flex align-items-center pt-25">
+                                <div class="product-quantity d-flex align-items-center" id="quantity">
+                                    <span>{{__('Qty')}}</span>
+                                    <button type="button" id="sub" class="sub subclick">-</button>
+                                    <input type="text" id="detailsQuantity" id="1" value="1" />
+                                    <button type="button" id="add" class="add addclick">+</button>
+                                </div>
                             </div>
-                            <div class="shop-review pl-40">
-                                <ul>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                </ul>
-                            </div>
-                        </div>
+                        @endif
                         <div class="shop-text">
                             <p>{{$product->summary}}</p>
                         </div>
@@ -126,10 +112,7 @@
                         </div>
 
                         <div class="shop-btns pt-45">
-                            <a data-href="{{route('add.cart',$product->id)}}" class="main-btn-2 main-btn cart-link ">{{__('Add To Cart')}}  <i class="fa fa-shopping-basket"></i></a>
-                            <form class="d-inline-block ml-2" method="GET" action="{{route('front.product.checkout',$product->slug)}}">
-                                <input type="hidden" value="" name="qty" id="order_click_with_qty">
-                            </form>
+                            <a data-href="{{route('add.cart',$product->id)}}" data-product="{{$product}}" class="main-btn-2 main-btn cart-link ">{{__('Add To Cart')}}  <i class="fa fa-shopping-basket"></i></a>
                         </div>
                     </div>
                 </div>
@@ -166,7 +149,11 @@
                                     </div>
                                         @foreach ($reviews as $review)
                                         <div class="shop-review-user">
-                                            <img  src="{{ !empty($review->user) ? asset('assets/front/img/user/'.$review->user->photo) : asset('assets/front/img/user/profile.jpg') }}" width="60">
+                                            @if (strpos($review->user->photo, 'facebook') !== false || strpos($review->user->photo, 'google'))
+                                                <img src="{{$review->user->photo ? $review->user->photo : asset('assets/front/img/user/profile.jpg')}}" alt="user image" width="60">
+                                            @else
+                                                <img src="{{$review->user->photo ? asset('assets/front/img/user/'.$review->user->photo) : ''}}" alt="user image" width="60">
+                                            @endif
                                             <ul>
                                                 <div class="rate">
                                                     <div class="rating" style="width:{{$review->review * 20}}%"></div>
@@ -239,6 +226,10 @@
             </div>
         </div>
     </div>
+
+    {{-- Variation Modal Starts --}}
+    @includeIf('front.partials.variation-modal')
+    {{-- Variation Modal Ends --}}
 
     <!--====== SHOP DETAILS PART ENDS ======-->
 @endsection

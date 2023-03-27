@@ -23,17 +23,6 @@ class PaymentGateway extends Model
         return $data;
     }
 
-    public function showCheckoutLink(){
-        $link = '';
-        $data = $this->keyword == null ? 'other' : $this->keyword;
-        if($data == 'paypal'){
-            $link = route('front.paypal.submit');
-        }else if($data == 'stripe'){
-            $link = route('front.stripe.submit');
-        }
-        return $link;
-    }
-
     public function showForm(){
         $show = '';
         $data = $this->keyword == null ? 'other' : $this->keyword;

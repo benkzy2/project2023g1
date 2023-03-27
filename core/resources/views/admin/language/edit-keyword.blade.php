@@ -39,6 +39,12 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">{{$la->name}}</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Edit Keyword</a>
       </li>
     </ul>

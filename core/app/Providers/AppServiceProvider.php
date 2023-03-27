@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use App\Models\BasicSetting as BS;
 use App\Models\Social;
 use App\Models\Language;
+use App\Models\Menu;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,6 +41,15 @@ class AppServiceProvider extends ServiceProvider
 
             $bs = $currentLang->basic_setting;
             $be = $currentLang->basic_extended;
+
+            $apopups = $currentLang->popups()->where('status', 1)->orderBy('serial_number', 'ASC')->get();
+
+            if (Menu::where('language_id', $currentLang->id)->count() > 0) {
+                $menus = Menu::where('language_id', $currentLang->id)->first()->menus;
+            } else {
+                $menus = json_encode([]);
+            }
+
             if ($currentLang->rtl == 1) {
                 $rtl = 1;
             } else {
@@ -49,6 +59,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with('bs', $bs );
             $view->with('be', $be );
             $view->with('currentLang', $currentLang );
+            $view->with('apopups', $apopups);
+            $view->with('menus', $menus );
             $view->with('rtl', $rtl );
         });
         View::share('langs', $langs);

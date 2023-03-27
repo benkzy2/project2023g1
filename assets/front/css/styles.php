@@ -345,3 +345,65 @@ h3.subscribe-title::before {
 h3.subscribe-title::after {
     background: <?php echo htmlspecialchars($color); ?>;
 }
+.faq-section .accordion .card .card-header .btn:hover {
+    background-color: <?php echo htmlspecialchars($color); ?>;
+}
+.faq-section .accordion .card .card-header .btn[aria-expanded="true"] {
+    background-color: <?php echo htmlspecialchars($color); ?>;
+}
+.single-job a.title {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+
+.single-job strong i {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+.job-details h3 {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+.category-lists ul li a::after {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+.category-lists ul li a:hover {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+.category-lists ul li.active a {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+#variationModal .btn-primary {
+    background-color: <?php echo htmlspecialchars($color); ?>;
+    border-color: <?php echo htmlspecialchars($color); ?>;
+}
+
+#variationModal .form-check span {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+
+#variationModal .modal-title small {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+.modal-quantity span {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+button.cookie-consent__agree {
+    background-color: <?php echo htmlspecialchars($color); ?>;
+}
+.food-menu-area .food-menu-items .single-menu-item .menu-content a.title:hover {
+    color: <?php echo htmlspecialchars($color); ?>;
+}
+.food-menu-area.food-menu-2-area .food-menu-items .single-menu-item:hover {
+    border: 1px solid <?php echo htmlspecialchars($color); ?>;
+}
+.shop-details-area .shop-item .shop-thumb .slick-arrow {
+    background: <?php echo htmlspecialchars($color); ?>;
+}
+.shop-details-area .shop-item .shop-list .shop-thumb-active .slick-arrow {
+    background: <?php echo htmlspecialchars($color); ?>;
+}
+.base-btn {
+    background-color: <?php echo htmlspecialchars($color); ?>;
+    border: 1px solid <?php echo htmlspecialchars($color); ?>;
+}
+.checkout-area .coupon:before {
+    background: <?php echo htmlspecialchars($color); ?>;
+}

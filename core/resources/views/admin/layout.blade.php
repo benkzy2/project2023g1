@@ -25,11 +25,9 @@
     </style>
     @endif
 
-    @yield('styles')
-
 </head>
 <body data-background-color="dark">
-	<div class="wrapper">
+	<div class="wrapper @yield('sidebar')">
 
     {{-- top navbar area start --}}
     @includeif('admin.partials.top-navbar')

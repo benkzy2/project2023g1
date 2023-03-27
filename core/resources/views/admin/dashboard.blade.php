@@ -133,10 +133,10 @@
 					<div class="card">
 						<div class="card-header">
 							<div class="card-head-row">
-								<h4 class="card-title">Recent Table Book</h4>
+								<h4 class="card-title">Recent Reservation Requests</h4>
 							</div>
 							<p class="card-category">
-							Top 10 latest table book request</p>
+							Top 10 latest table reservation requests</p>
 						</div>
 						<div class="card-body">
 				  <div class="row">
@@ -148,26 +148,23 @@
 							<table class="table table-striped mt-3">
 								<thead>
 								  <tr>
-									<th scope="col">Name</th>
-									<th scope="col">Email</th>
-									<th scope="col">Phone</th>
-									<th scope="col">Date</th>
-									<th scope="col">Time</th>
-									<th scope="col">Person</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Details</th>
 								  </tr>
 								</thead>
 								<tbody>
-								  @foreach ($table_books as $key => $table)
-									<tr>
-									  <td>{{convertUtf8($table->name)}}</td>
-									  <td>{{convertUtf8($table->email)}}</td>
-									  <td>{{convertUtf8($table->phone)}}</td>
-									  <td>{{convertUtf8($table->date)}}</td>
-									  <td>{{convertUtf8($table->time)}}</td>
-									  <td>{{convertUtf8($table->person)}}</td>
-									</tr>
+                                    @foreach ($table_books as $key => $reservation)
+                                    <tr>
+                                      <td>{{convertUtf8($reservation->name)}}</td>
+                                      <td>{{convertUtf8($reservation->email)}}</td>
+                                      <td>
+                                        <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#detailsModal{{$reservation->id}}"><i class="fas fa-eye"></i> View</button>
+                                      </td>
+                                    </tr>
 
-								  @endforeach
+                                    @includeif('admin.reservations.reservation-details')
+                                  @endforeach
 								</tbody>
 							  </table>
 						  </div>

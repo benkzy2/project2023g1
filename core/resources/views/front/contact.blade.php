@@ -102,30 +102,48 @@
                             <p>{{convertUtf8($contact->contact_text)}}</p>
                         </div>
                         <div class="contact-info-list">
-                            <div class="item mt-30">
-                                <i class="flaticon-placeholder"></i>
-                                <ul>
-                                    @foreach (explode(',',$contact->contact_address) as $address)
-                                    <li>{{convertUtf8($address)}}</li>
-                                    @endforeach
+                            @if (!empty($bs->contact_address))
+                                <div class="item mt-30">
+                                    <i class="flaticon-placeholder"></i>
+                                    @php
+                                        $addresses = explode(PHP_EOL, $bs->contact_address);
+                                    @endphp
+                                    <ul>
+                                        @foreach ($addresses as $address)
+                                            <li class="d-block mb-0">> {{convertUtf8($address)}}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
-                                </ul>
-                            </div>
-                            <div class="item mt-30">
-                                <i class="flaticon-mail"></i>
-                                <ul>
-                                    <li>{{convertUtf8($be->to_mail)}}</li>
-                                </ul>
-                            </div>
-                            <div class="item mt-30">
-                                <i class="flaticon-smartphone"></i>
-                                <ul>
-                                    @foreach (explode(',',$contact->contact_number) as $number)
-                                    <li>{{convertUtf8($number)}}</li>
-                                    @endforeach
+                            @if (!empty($bs->contact_mails))
 
-                                </ul>
-                            </div>
+                                <div class="item mt-30">
+                                    <i class="flaticon-mail"></i>
+                                    <ul>
+                                        @php
+                                            $mails = explode(',', $bs->contact_mails);
+                                        @endphp
+                                        @foreach ($mails as $mail)
+                                            <li class="d-block mb-0">> {{$mail}}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            @if (!empty($bs->contact_number))
+                                <div class="item mt-30">
+                                    <i class="flaticon-smartphone"></i>
+                                    <ul>
+                                        @php
+                                            $phones = explode(',', $bs->contact_number);
+                                        @endphp
+                                        @foreach ($phones as $phone)
+                                            <li class="d-block mb-0">> {{$phone}}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

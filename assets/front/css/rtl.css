@@ -18,6 +18,18 @@
 	left: auto;
 	right: -50px;
 }
+.navigation .navbar .navbar-nav li.submenus::after {
+    right: auto;
+    left: 16px;
+}
+.navigation .navbar .navbar-nav .nav-item .sub-menu>li .sub-menu {
+    left: auto;
+    right: 100%;
+}
+.navigation .navbar .navbar-nav .nav-item .sub-menu {
+    left: auto;
+    right: 0;
+}
 .banner-area .banner-thumb{
 	right: auto;
 	left: 230px;
@@ -418,6 +430,28 @@ h3.subscribe-title::after {
     font-size: 20px;
     margin-left: -34px;
 }
+.searchbar input[type="text"], .searchbar input[type="search"] {
+    padding-left: 0;
+    padding-right: 20px;
+}
+.searchbar input[type="text"], .searchbar input[type="search"] {
+    float: right;
+}
+.searchbar button[type="submit"], .searchbar input[type="submit"] {
+    float: right;
+}
+.blog-sidebar-widgets.category-widget {
+    text-align: right;
+}
+.category-lists ul li a::after {
+    left: auto;
+    right: 0;
+    transform: rotateY(180deg);
+}
+.category-lists ul li a {
+    padding-left: 0;
+    padding-right: 10px;
+}
 .flag.flag-2 {
     left: auto;
     right: -1px;
@@ -426,6 +460,101 @@ h3.subscribe-title::after {
     font-size: 18px;
     margin-top: 16px;
     margin-left: -7px;
+}
+.category-lists.job li a span {
+    float: left;
+}
+.job-lists .single-job {
+    text-align: right;
+}
+.job-details .info {
+    text-align: right;
+}
+.job-details h3 {
+    text-align: right;
+}
+.faq-section .accordion .card .card-header .btn::after {
+    right: auto;
+    left: 30px;
+}
+.faq-section .accordion .card .card-header .btn {
+    text-align: right !important;
+}
+.faq-section .accordion .card .card-header .btn[aria-expanded="true"]::after {
+    right: auto;
+    left: 30px;
+}
+.faq-section .card-body {
+    text-align: right;
+}
+.input-box {
+    text-align: right;
+}
+.form-check-label {
+    padding-right: 20px;
+}
+.modal-header .close {
+    margin: -1rem auto -1rem -1rem;
+}
+.variation-label, .addon-label {
+    text-align: right;
+}
+
+.modal-title small {
+    margin-right: 10px;
+    margin-left: 0;
+}
+.cart-table .price.cart_price p {
+    direction: ltr;
+}
+.cart-area .cart-table tbody tr .sub-total {
+    direction: ltr;
+}
+.login-area .login-content .input-box input {
+    padding-left: 0;
+    padding-right: 30px;
+}
+.checkout-area .table {
+    text-align: right;
+}
+.checkout-area .table .cart-table tbody tr td {
+    padding-left: 0;
+    padding-right: 30px;
+}
+.form.billing-info {
+    text-align: right;
+}
+.checkout-area {
+    text-align: right;
+}
+.checkout-area .coupon:before {
+    left: auto;
+    right: 0;
+}
+.cart-total-table li {
+    direction: ltr;
+}
+.user-dashbord .user-profile-details .order-details .progress-area-step .progress-steps li {
+    float: right;
+}
+.links {
+    text-align: right;
+}
+.user-dashbord .user-profile-details .order-details .progress-area-step .progress-steps li:first-child:after {
+    display: block;
+}
+.user-dashbord .user-profile-details .order-details .progress-area-step .progress-steps li:last-child:after {
+    display: none;
+}
+.user-dashbord .view-order-page .order-info-area .prinit .btn i {
+    margin-right: 0;
+    margin-left: 10px;
+}
+.support-bar .links {
+    text-align: left;
+}
+.navigation .navbar .navbar-nav li.submenus::after {
+    content: '\f053';
 }
 @media only screen and (max-width: 1600px) and (min-width: 1200px){
 	.banner-area .banner-thumb{

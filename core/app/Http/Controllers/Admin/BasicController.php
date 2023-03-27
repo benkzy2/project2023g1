@@ -7,10 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\BasicSetting;
 use App\Models\BasicExtended;
 use App\Models\Language;
-use App\Models\Service;
+use App\Models\Timezone;
 use Session;
 use Validator;
-use Config;
 use Artisan;
 use Purifier;
 
@@ -108,6 +107,51 @@ class BasicController extends Controller
         return back();
     }
 
+    public function preloader(Request $request)
+    {
+        return view('admin.basic.preloader');
+    }
+
+    public function updatepreloader(Request $request)
+    {
+        $img = $request->file('file');
+        $allowedExts = array('jpg', 'png', 'jpeg', 'gif');
+
+        $rules = [
+            'preloader_status' => 'required',
+            'file' => [
+                function ($attribute, $value, $fail) use ($img, $allowedExts) {
+                    if (!empty($img)) {
+                        $ext = $img->getClientOriginalExtension();
+                        if (!in_array($ext, $allowedExts)) {
+                            return $fail("Only gif, png, jpg, jpeg image is allowed");
+                        }
+                    }
+                },
+            ],
+        ];
+
+        $request->validate($rules);
+
+        $bss = BasicSetting::all();
+
+        if ($request->hasFile('file')) {
+            $filename = uniqid() . '.' . $img->getClientOriginalExtension();
+            $img->move('assets/front/img/', $filename);
+        }
+
+        foreach ($bss as $key => $bs) {
+            $bs->preloader_status = $request->preloader_status;
+            if ($request->hasFile('file')) {
+                @unlink('assets/front/img/' . $bs->preloader);
+                $bs->preloader = $filename;
+            }
+            $bs->save();
+        }
+        Session::flash('success', 'Preloader updated successfully.');
+        return back();
+    }
+
 
     public function basicinfo(Request $request)
     {
@@ -115,6 +159,7 @@ class BasicController extends Controller
         $data['lang_id'] = $lang->id;
         $data['abs'] = $lang->basic_setting;
         $data['abe'] = $lang->basic_extended;
+        $data['timezones'] = Timezone::all();
         return view('admin.basic.basicinfo', $data);
     }
 
@@ -128,15 +173,18 @@ class BasicController extends Controller
             'base_currency_symbol_position' => 'required',
             'base_currency_text' => 'required',
             'base_currency_text_position' => 'required',
-            'base_currency_rate' => 'required|numeric'
-
+            'base_currency_rate' => 'required|numeric',
+            'home_version' => 'required'
         ]);
 
-        $bs = BasicSetting::where('language_id', $langid)->firstOrFail();
-        $bs->website_title = $request->website_title;
-        $bs->base_color = $request->base_color;
-        $bs->office_time = $request->office_time;
-        $bs->save();
+        $bss = BasicSetting::all();
+        foreach ($bss as $key => $bs) {
+            $bs->website_title = $request->website_title;
+            $bs->base_color = $request->base_color;
+            $bs->office_time = $request->office_time;
+            $bs->home_version = $request->home_version;
+            $bs->save();
+        }
 
         $bes = BasicExtended::all();
         foreach ($bes as $key => $be) {
@@ -145,8 +193,16 @@ class BasicController extends Controller
             $be->base_currency_text = $request->base_currency_text;
             $be->base_currency_text_position = $request->base_currency_text_position;
             $be->base_currency_rate = $request->base_currency_rate;
+            if (!empty($request->timezone)) {
+                $be->timezone = $request->timezone;
+            }
             $be->save();
         }
+
+        // set timezone in .env
+        $arr = ['TIMEZONE' => $request->timezone];
+        setEnvironmentValue($arr);
+        \Artisan::call('config:clear');
 
 
         Session::flash('success', 'Basic informations updated successfully!');
@@ -254,24 +310,28 @@ class BasicController extends Controller
         $lang = Language::where('code', $request->language)->firstOrFail();
         $data['lang_id'] = $lang->id;
         $data['abs'] = $lang->basic_setting;
+        $data['abe'] = $lang->basic_extended;
         return view('admin.basic.headings', $data);
     }
 
     public function updateheading(Request $request, $langid)
     {
         $request->validate([
-            'menu_title' => 'required|max:30',
-            'items_title' => 'required|max:40',
-            'menu_details_title' => 'required|max:30',
-            'blog_details_title' => 'required|max:30',
-            'contact_title' => 'required|max:30',
-            'gallery_title' => 'required|max:30',
-            'team_title' => 'required|max:30',
-            'blog_title' => 'required|max:30',
-            'error_title' => 'required|max:30',
-            'cart_title' => 'required|max:30',
-            'checkout_title' => 'required|max:30',
-            'reservation_title' => 'required|max:30'
+            'menu_title' => 'required',
+            'items_title' => 'required',
+            'menu_details_title' => 'required',
+            'blog_details_title' => 'required',
+            'contact_title' => 'required',
+            'career_title' => 'required',
+            'career_details_title' => 'required',
+            'gallery_title' => 'required',
+            'faq_title' => 'required',
+            'team_title' => 'required',
+            'blog_title' => 'required',
+            'error_title' => 'required',
+            'cart_title' => 'required',
+            'checkout_title' => 'required',
+            'reservation_title' => 'required'
         ]);
 
         $bs = BasicSetting::where('language_id', $langid)->firstOrFail();
@@ -290,6 +350,12 @@ class BasicController extends Controller
 
         $bs->save();
 
+        $be = BasicExtended::where('language_id', $langid)->firstOrFail();
+        $be->faq_title = $request->faq_title;
+        $be->career_title = $request->career_title;
+        $be->career_details_title = $request->career_details_title;
+        $be->save();
+
         Session::flash('success', 'Page title & subtitles updated successfully!');
         return back();
     }
@@ -306,11 +372,54 @@ class BasicController extends Controller
         $bss = BasicSetting::all();
 
         foreach ($bss as $bs) {
+            $bs->tawk_to_script = $request->tawk_to_script;
+            $bs->is_tawkto = $request->is_tawkto;
+            $bs->is_disqus = $request->is_disqus;
+            $bs->disqus_script = $request->disqus_script;
+            $bs->google_analytics_script = $request->google_analytics_script;
+            $bs->is_analytics = $request->is_analytics;
+            $bs->appzi_script = $request->appzi_script;
+            $bs->is_appzi = $request->is_appzi;
+            $bs->addthis_script = $request->addthis_script;
+            $bs->is_addthis = $request->is_addthis;
             $bs->is_recaptcha = $request->is_recaptcha;
             $bs->google_recaptcha_site_key = $request->google_recaptcha_site_key;
             $bs->google_recaptcha_secret_key = $request->google_recaptcha_secret_key;
+
+            $bs->is_whatsapp = $request->is_whatsapp;
+            $bs->whatsapp_number = $request->whatsapp_number;
+            $bs->whatsapp_header_title = $request->whatsapp_header_title;
+            $bs->whatsapp_popup_message = $request->whatsapp_popup_message;
+            $bs->whatsapp_popup = $request->whatsapp_popup;
+
             $bs->save();
         }
+
+
+        $bes = BasicExtended::all();
+        foreach ($bes as $key => $be) {
+            $be->facebook_pexel_script = $request->facebook_pexel_script;
+            $be->is_facebook_pexel = $request->is_facebook_pexel;
+
+            $be->pusher_app_id = $request->pusher_app_id;
+            $be->pusher_app_key = $request->pusher_app_key;
+            $be->pusher_app_secret = $request->pusher_app_secret;
+            $be->pusher_app_cluster = $request->pusher_app_cluster;
+
+            $be->is_facebook_login = $request->is_facebook_login;
+            $be->facebook_app_id = $request->facebook_app_id;
+            $be->facebook_app_secret = $request->facebook_app_secret;
+
+            $be->is_google_login = $request->is_google_login;
+            $be->google_client_id = $request->google_client_id;
+            $be->google_client_secret = $request->google_client_secret;
+
+            $be->save();
+        }
+
+        $arr = ['PUSHER_APP_ID' => $request->pusher_app_id, 'PUSHER_APP_KEY' => $request->pusher_app_key, 'PUSHER_APP_SECRET' => $request->pusher_app_secret, 'PUSHER_APP_CLUSTER' => $request->pusher_app_cluster];
+        setEnvironmentValue($arr);
+        \Artisan::call('config:clear');
 
         Session::flash('success', 'Scripts updated successfully!');
         return back();
@@ -357,82 +466,31 @@ class BasicController extends Controller
 
 
         foreach ($bss as $bs) {
-
             $bs->maintainance_text = Purifier::clean($request->maintainance_text);
             $bs->maintainance_mode = $request->maintainance_mode;
+            $bs->ips = $request->ips;
             $bs->save();
         }
 
+        $down = "down";
+        if ($request->filled('ips')) {
+            $ips = explode(",", $request->ips);
+            foreach ($ips as $key => $ip) {
+                $down .= " --allow=" . $ip;
+            }
+        }
+        // return $down;
+
         if ($request->maintainance_mode == 1) {
-            Artisan::call('down');
-        } else {
             @unlink('core/storage/framework/down');
+            Artisan::call($down);
+        } else {
+            Artisan::call('up');
         }
 
         Session::flash('success', 'Maintanance mode & page updated successfully!');
         return back();
     }
-
-
-    public function announcement(Request $request)
-    {
-        $lang = Language::where('code', $request->language)->firstOrFail();
-        $data['lang_id'] = $lang->id;
-        $data['abs'] = $lang->basic_setting;
-
-        return view('admin.basic.announcement', $data);
-    }
-
-    public function updateannouncement(Request $request, $langid)
-    {
-
-        $bs = BasicSetting::where('language_id', $langid)->firstOrFail();
-        if ($request->filled('announcement_delay')) {
-            $bs->announcement_delay = $request->announcement_delay;
-        } else {
-            $bs->announcement_delay = 0.00;
-        }
-
-        $img = $request->file('file');
-        $allowedExts = array('jpg', 'png', 'jpeg');
-
-        $rules = [
-            'file' => [
-                function ($attribute, $value, $fail) use ($img, $allowedExts) {
-                    if (!empty($img)) {
-                        $ext = $img->getClientOriginalExtension();
-                        if (!in_array($ext, $allowedExts)) {
-                            return $fail("Only png, jpg, jpeg image is allowed");
-                        }
-                    }
-                },
-            ],
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            $validator->getMessageBag()->add('error', 'true');
-            return response()->json(['errors' => $validator->errors(), 'id' => 'announcement_img']);
-        }
-
-        if ($request->hasFile('file')) {
-            $bs = BasicSetting::where('language_id', $langid)->firstOrFail();
-            @unlink('assets/front/img/' . $bs->announcement);
-            $filename = uniqid() . '.' . $img->getClientOriginalExtension();
-            $img->move('assets/front/img/', $filename);
-
-            $bs->announcement = $filename;
-            $bs->save();
-        }
-
-        $bs->is_announcement = $request->is_announcement;
-        $bs->save();
-
-        Session::flash('success', 'Updated successfully!');
-        return back();
-    }
-
-
 
 
     public function sections(Request $request)
@@ -443,14 +501,6 @@ class BasicController extends Controller
 
         return view('admin.basic.sections', $data);
     }
-    public function pagesections(Request $request)
-    {
-        $lang = Language::where('code', $request->language)->firstOrFail();
-        $data['lang_id'] = $lang->id;
-        $data['abs'] = $lang->basic_setting;
-
-        return view('admin.basic.page_section', $data);
-    }
 
     public function updatesections(Request $request, $langid)
     {
@@ -458,25 +508,6 @@ class BasicController extends Controller
         $bs->update($request->all());
 
         Session::flash('success', 'Sections customized successfully!');
-        return back();
-    }
-
-    public function updatepagesections(Request $request, $langid)
-    {
-
-        $bs = BasicSetting::where('language_id', $langid)->firstOrFail();
-        $bs->item_page = $request->item_page;
-        $bs->menu_page = $request->menu_page;
-        $bs->menu_page1 = $request->menu_page1;
-        $bs->blog_page = $request->blog_page;
-        $bs->cart_page = $request->cart_page;
-        $bs->checkout_page = $request->checkout_page;
-        $bs->contact_page = $request->contact_page;
-        $bs->gallery_page = $request->gallery_page;
-        $bs->team_page = $request->team_page;
-        $bs->save();
-
-        Session::flash('success', 'Page Sections customized successfully!');
         return back();
     }
 
@@ -508,6 +539,32 @@ class BasicController extends Controller
         return back();
     }
 
+    public function callwaiter(Request $request)
+    {
+        return view('admin.basic.callwaiter');
+    }
+
+    public function updateCallwaiter(Request $request)
+    {
+
+        $rules = [
+            'website_call_waiter' => 'required',
+            'qr_call_waiter' => 'required',
+        ];
+
+        $request->validate($rules);
+
+        $bss = BasicSetting::all();
+
+        foreach ($bss as $key => $bs) {
+            $bs->website_call_waiter = $request->website_call_waiter;
+            $bs->qr_call_waiter = $request->qr_call_waiter;
+            $bs->save();
+        }
+        Session::flash('success', 'Status updated successfully.');
+        return back();
+    }
+
 
     public function menusection(Request $request)
     {
@@ -525,6 +582,7 @@ class BasicController extends Controller
         $img = $request->file('menu_section_img');
         $allowedExts = array('jpg', 'png', 'jpeg');
         $rules = [
+            'menu_version' => 'required',
             'menu_section_subtitle' => 'required|max:255',
             'menu_section_title' => 'required|max:255',
             'menu_section_img' => [
@@ -556,6 +614,7 @@ class BasicController extends Controller
         }
 
 
+        $be->menu_version = $request->menu_version;
         $be->menu_section_subtitle = $request->menu_section_subtitle;
         $be->menu_section_title = $request->menu_section_title;
         $be->save();
@@ -680,9 +739,21 @@ class BasicController extends Controller
 
     public function specialsectionUpdate(Request $request, $langid)
     {
+        $img = $request->file('special_section_bg');
+        $allowedExts = array('jpg', 'png', 'jpeg');
         $rules = [
             'special_section_subtitle' => 'required|max:255',
-            'special_section_title' => 'required|max:255'
+            'special_section_title' => 'required|max:255',
+            'special_section_bg' => [
+                function ($attribute, $value, $fail) use ($img, $allowedExts) {
+                    if (!empty($img)) {
+                        $ext = $img->getClientOriginalExtension();
+                        if (!in_array($ext, $allowedExts)) {
+                            return $fail("Only png, jpg, jpeg image is allowed");
+                        }
+                    }
+                },
+            ],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -692,11 +763,40 @@ class BasicController extends Controller
         }
 
         $be = BasicExtended::where('language_id', $langid)->firstOrFail();
+
+        if ($request->hasFile('special_section_bg')) {
+            $filename = time() . '.' . $img->getClientOriginalExtension();
+            $request->file('special_section_bg')->move('assets/front/img/', $filename);
+            @unlink('assets/front/img/' . $be->special_section_bg);
+            $be->special_section_bg = $filename;
+        }
+
         $be->special_section_subtitle = $request->special_section_subtitle;
         $be->special_section_title = $request->special_section_title;
         $be->save();
 
         Session::flash('success', 'Texts updated successfully!');
+        return "success";
+    }
+
+    public function removeImage(Request $request)
+    {
+        $type = $request->type;
+        $langid = $request->language_id;
+
+        $be = BasicExtended::where('language_id', $langid)->firstOrFail();
+
+        if ($type == "menu_background") {
+            @unlink("assets/front/img/" . $be->menu_section_img);
+            $be->menu_section_img = NULL;
+            $be->save();
+        } elseif ($type == "table_background") {
+            @unlink("assets/front/img/" . $be->table_section_img);
+            $be->table_section_img = NULL;
+            $be->save();
+        }
+
+        $request->session()->flash('success', 'Image removed successfully!');
         return "success";
     }
 }

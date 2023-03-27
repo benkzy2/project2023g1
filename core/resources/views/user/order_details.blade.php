@@ -35,18 +35,44 @@
                                                 <div class="icon"></div>
                                                 <div class="progress-title">{{__('Pending')}}</div>
                                             </li>
-                                            <li class="{{$data->order_status == 'processing' ? 'active' : ''}}">
+                                            <li class="{{$data->order_status == 'received' ? 'active' : ''}}">
                                                 <div class="icon"></div>
-                                                <div class="progress-title">{{__('Processing')}}</div>
+                                                <div class="progress-title">{{__('Received')}}</div>
                                             </li>
-                                            <li class="{{$data->order_status == 'completed' ? 'active' : ''}}">
+                                            <li class="{{$data->order_status == 'preparing' ? 'active' : ''}}">
                                                 <div class="icon"></div>
-                                                <div class="progress-title">{{__('Completed')}}</div>
+                                                <div class="progress-title">{{__('Preparing')}}</div>
                                             </li>
-                                            <li class="{{$data->order_status == 'reject' ? 'active' : ''}}">
+                                            @if ($data->serving_method != 'on_table')
+                                                <li class="{{$data->order_status == 'ready_to_pick_up' ? 'active' : ''}}">
+                                                    <div class="icon"></div>
+                                                    <div class="progress-title">{{__('Ready to pick up')}}</div>
+                                                </li>
+                                                <li class="{{$data->order_status == 'picked_up' ? 'active' : ''}}">
+                                                    <div class="icon"></div>
+                                                    <div class="progress-title">{{__('Picked up')}}</div>
+                                                </li>
+                                            @endif
+                                            @if ($data->serving_method == 'home_delivery')
+                                                <li class="{{$data->order_status == 'delivered' ? 'active' : ''}}">
+                                                    <div class="icon"></div>
+                                                    <div class="progress-title">{{__('Delivered')}}</div>
+                                                </li>
+                                            @endif
+                                            <li class="{{$data->order_status == 'cancelled' ? 'active' : ''}}">
                                                 <div class="icon"></div>
-                                                <div class="progress-title">{{__('Rejected')}}</div>
+                                                <div class="progress-title">{{__('Cancelled')}}</div>
                                             </li>
+                                            @if ($data->serving_method == 'on_table')
+                                                <li class="{{$data->order_status == 'ready_to_serve' ? 'active' : ''}}">
+                                                    <div class="icon"></div>
+                                                    <div class="progress-title">{{__('Ready to Serve')}}</div>
+                                                </li>
+                                                <li class="{{$data->order_status == 'served' ? 'active' : ''}}">
+                                                    <div class="icon"></div>
+                                                    <div class="progress-title">{{__('Served')}}</div>
+                                                </li>
+                                            @endif
                                         </ul>
                                     </div>
                                     <div class="title">
@@ -58,7 +84,7 @@
                                             <div class="row align-items-center">
                                                 <div class="col-lg-8">
                                                    <div class="order-info">
-                                                       <h3>{{__('Order')}} {{$data->order_id}} [{{$data->order_status}}]</h3>
+                                                       <h3 class="text-capitalize">{{__('Order')}} {{$data->order_id}} [{{str_replace("_", " ", $data->order_status)}}]</h3>
                                                    <p>{{__('Order Date')}} {{$data->created_at->format('d-m-Y')}}</p>
                                                    </div>
                                                 </div>
@@ -72,34 +98,60 @@
                                     </div>
                                     <div class="billing-add-area">
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="main-info">
-                                                    <h5>{{__('Shipping Details')}}</h5>
-                                                    <ul class="list">
-                                                        <li><p><span>{{__('Email')}}:</span>{{convertUtf8($data->shpping_email)}}</p></li>
-                                                        <li><p><span>{{__('Phone')}}:</span>{{convertUtf8($data->shpping_number)}}</p></li>
-                                                        <li><p><span>{{__('City')}}:</span>{{convertUtf8($data->shpping_city)}}</p></li>
-                                                        <li><p><span>{{__('Address')}}:</span>{{convertUtf8($data->shpping_address)}}</p></li>
-                                                        <li><p><span>{{__('Country')}}:</span>{{convertUtf8($data->shpping_country)}}</p></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="main-info">
-                                                    <h5>{{__('Billing Details')}}</h5>
-                                                    <ul class="list">
-                                                        <li><p><span>{{__('Email')}}:</span>{{convertUtf8($data->billing_email)}}</p></li>
-                                                        <li><p><span>{{__('Phone')}}:</span>{{convertUtf8($data->billing_number)}}</p></li>
-                                                        <li><p><span>{{__('City')}}:</span>{{convertUtf8($data->billing_city)}}</p></li>
-                                                        <li><p><span>{{__('Address')}}:</span>{{convertUtf8($data->billing_address)}}</p></li>
-                                                        <li><p><span>{{__('Country')}}:</span>{{convertUtf8($data->billing_country)}}</p></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
 
                                             <div class="col-md-4 ">
                                                 <div class="payment-information">
-                                                    <h5>{{__('Payment Status')}} : </h5>
+                                                    <h5>{{__('Order')}} : </h5>
+                                                    @if (!empty($data->type))
+                                                    <p>{{__('Ordered From')}} :
+                                                        <span>
+                                                            @if(strtolower($data->type) =='website')
+                                                                {{__('Website Menu')}}
+                                                            @else
+                                                                {{__('QR Menu')}}
+                                                            @endif
+                                                        </span>
+                                                    </p>
+                                                    @endif
+
+                                                    @if (!empty($data->serving_method))
+                                                    <p>{{__('Serving Method')}} :
+                                                        <span>
+                                                            @if(strtolower($data->serving_method) == 'on_table')
+                                                                {{__('On Table')}}
+                                                            @elseif(strtolower($data->serving_method) == 'home_delivery')
+                                                                {{__('Home Delivery')}}
+                                                            @elseif(strtolower($data->serving_method) == 'pick_up')
+                                                                {{__('Pick up')}}
+                                                            @endif
+                                                        </span>
+                                                    </p>
+                                                    @endif
+
+                                                    @if ($data->postal_code_status == 0)
+                                                        @if (!empty($data->shipping_method))
+                                                        <p>{{__('Shipping Method')}} : <span> {{$data->shipping_method}} </span></p>
+                                                        @endif
+                                                    @elseif ($data->postal_code_status == 1)
+                                                        <p>{{__('Postal Code')}} ({{__('Delivery Area')}}) : <span> {{$data->postal_code}} </span></p>
+                                                    @endif
+
+                                                    @if (!empty($data->shipping_charge))
+                                                        <p>{{__('Shipping Charge')}} : <span style="direction: ltr;" class="amount">{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}} {{$data->shipping_charge}} {{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</span></p>
+                                                    @endif
+
+                                                    @if (!empty($data->tax))
+                                                        <p>{{__('Tax')}} : <span style="direction: ltr;" class="amount">{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}} {{$data->tax}} {{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</span></p>
+                                                    @endif
+
+                                                    @if (!empty($data->coupon))
+                                                        <p>{{__('Discount')}} : <span style="direction: ltr;" class="amount">{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}} {{$data->coupon}} {{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</span></p>
+                                                    @endif
+
+                                                    <p>{{__('Paid Amount')}} : <span style="direction: ltr;" class="amount">{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}} {{$data->total}} {{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</span></p>
+
+                                                    <p class="text-capitalize">{{__('Payment Method')}} : {{convertUtf8($data->method)}}</p>
+
                                                     <p>{{__('Payment Status')}} :
                                                         @if($data->payment_status =='Pending' || $data->payment_status == 'pending')
                                                         <span class="badge badge-danger">{{$data->payment_status}}  </span>
@@ -107,43 +159,178 @@
                                                         <span class="badge badge-success">{{$data->payment_status}}  </span>
                                                         @endif
                                                     </p>
-                                                    @if (!empty($data->shipping_method))
-                                                    <p>{{__('Shipping Method')}} : <span> {{$data->shipping_method}} </span></p>
-                                                    @endif
-                                                    <p>{{__('Shipping Charge')}} : <span class="amount">{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}} {{$data->shipping_charge}} {{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</span></p>
-                                                    <p>{{__('Paid amount')}} : <span class="amount">{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}} {{$data->total}} {{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</span></p>
-                                                <p>{{__('Payment Method')}} : {{convertUtf8($data->method)}}</p>
+
+                                                    <p>{{__('Complete')}} :
+                                                        @if(strtolower($data->complete) =='yes')
+                                                        <span class="badge badge-success">{{__('Yes')}}  </span>
+                                                        @else
+                                                        <span class="badge badge-danger">{{__('No')}}  </span>
+                                                        @endif
+                                                    </p>
+
+                                                    <p>{{__('Time')}} :
+                                                        {{$data->created_at}}
+                                                    </p>
+
+                                                    <p>{{__('Order Notes')}} :
+                                                        @if (!empty($order->order_notes))
+                                                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalNotes">Show</button>
+                                                        @else
+                                                        -
+                                                        @endif
+                                                    </p>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="modalNotes" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">__{{('Order Notes')}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{$data->order_notes}}
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+
+                                            @if ($data->serving_method == 'home_delivery')
+                                            <div class="col-md-4">
+                                                <div class="main-info">
+                                                    <h5>{{__('Shipping Details')}}</h5>
+                                                    <ul class="list">
+                                                        <li><p><span>{{__('Email Address')}}:</span>{{convertUtf8($data->shpping_email)}}</p></li>
+                                                        <li><p><span>{{__('Phone')}}:</span>{{convertUtf8($data->shpping_number)}}</p></li>
+                                                        <li><p><span>{{__('City')}}:</span>{{convertUtf8($data->shpping_city)}}</p></li>
+                                                        <li><p><span>{{__('Address')}}:</span>{{convertUtf8($data->shpping_address)}}</p></li>
+                                                        <li><p><span>{{__('Country')}}:</span>{{convertUtf8($data->shpping_country)}}</p></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            <div class="col-md-4">
+                                                <div class="main-info">
+                                                    <h5>
+                                                        @if ($data->serving_method == 'home_delivery')
+                                                            {{__('Billing Details')}}
+                                                        @else
+                                                            {{__('Information')}}
+                                                        @endif
+                                                    </h5>
+                                                    <ul class="list">
+                                                        @if (!empty($data->billing_email))
+                                                            <li><p><span>{{__('Email Address')}}:</span>{{convertUtf8($data->billing_email)}}</p></li>
+                                                        @endif
+                                                        @if (!empty($data->billing_number))
+                                                            <li><p><span>{{__('Phone')}}:</span>{{convertUtf8($data->billing_number)}}</p></li>
+                                                        @endif
+                                                        @if (!empty($data->billing_city))
+                                                            <li><p><span>{{__('City')}}:</span>{{convertUtf8($data->billing_city)}}</p></li>
+                                                        @endif
+                                                        @if (!empty($data->billing_address))
+                                                            <li><p><span>{{__('Address')}}:</span>{{convertUtf8($data->billing_address)}}</p></li>
+                                                        @endif
+                                                        @if (!empty($data->billing_country))
+                                                            <li><p><span>{{__('Country')}}:</span>{{convertUtf8($data->billing_country)}}</p></li>
+                                                        @endif
+
+                                                        @if ($data->serving_method == 'on_table')
+                                                            @if (!empty($data->table_number))
+                                                                <li><p><span>{{__('Table Number')}}:</span>{{convertUtf8($data->table_number)}}</p></li>
+                                                            @endif
+                                                            @if (!empty($data->waiter_name))
+                                                                <li><p><span>{{__('Waiter Name')}}:</span>{{convertUtf8($data->waiter_name)}}</p></li>
+                                                            @endif
+                                                        @endif
+
+                                                        @if ($data->serving_method == 'pick_up')
+                                                            @if (!empty($data->pick_up_date))
+                                                                <li><p><span>{{__('Pick up Date')}}:</span>{{convertUtf8($data->pick_up_date)}}</p></li>
+                                                            @endif
+                                                            @if (!empty($data->pick_up_time))
+                                                                <li><p><span>{{__('Pick up Time')}}:</span>{{convertUtf8($data->pick_up_time)}}</p></li>
+                                                            @endif
+                                                        @endif
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="table-responsive product-list">
-                                        <h5>{{__('Order Product')}}</h5>
+                                        <h5>{{__('Ordered Products')}}</h5>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>{{__('Image')}}</th>
-                                                    <th>{{__('Name')}}</th>
-                                                    <th>{{__('Details')}}</th>
-                                                    <th>{{__('Price')}}</th>
-                                                    <th>{{__('Total')}}</th>
+                                                   <th>#</th>
+                                                   <th>{{__('Product')}}</th>
+                                                   <th>{{__('Product Title')}}</th>
+                                                   <th>{{__('Price')}}</th>
+                                                   <th>{{__('Quantity')}}</th>
+                                                   <th>{{__('Total')}}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($data->orderitems as $key => $order)
+                                                @foreach ($data->orderitems as $key => $item)
                                                 @php
-                                                    $product = App\Models\Product::findOrFail($order->product_id);
+                                                    $product = App\Models\Product::findOrFail($item->product_id);
                                                 @endphp
                                                 <tr>
                                                     <td>{{$key+1}}</td>
-                                                    <td><img src="{{asset('assets/front/img/product/featured/'.$order->image)}}" alt="product" width="100"></td>
-                                                    <td><a href="{{route('front.product.details',[$product->slug,$product->id])}}">{{convertUtf8($order->title)}}</a></td>
                                                     <td>
-                                                        <b>{{__('Quantity')}}:</b> <span>{{$order->qty}}</span><br>
+                                                        <img src="{{asset('assets/front/img/product/featured/'.$item->image)}}" alt="image" width="100">
                                                     </td>
-                                                    <td>{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}}{{convertUtf8($order->price)}}{{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</td>
-                                                    <td>{{$data->currency_symbol_position == 'left' ? $data->currency_symbol : ''}}{{convertUtf8($order->price * $order->qty)}}{{$data->currency_symbol_position == 'right' ? $data->currency_symbol : ''}}</td>
+                                                    <td>
+                                                        <a href="{{route('front.product.details',[$product->slug,$product->id])}}">{{convertUtf8($item->title)}}</a>
+                                                        <br>
+                                                        @php
+                                                            $variations = json_decode($item->variations, true);
+                                                        @endphp
+                                                        @if (!empty($variations))
+                                                          <strong class="mr-1">{{__('Variation')}}:</strong> {{$variations["name"]}}
+                                                          <br>
+                                                        @endif
+                                                        @php
+                                                            $addons = json_decode($item->addons, true);
+                                                        @endphp
+                                                        @if (!empty($addons))
+                                                          <strong class="mr-1">{{__("Add On's")}}:</strong>
+
+                                                          @foreach ($addons as $addon)
+                                                              {{$addon["name"]}}
+                                                              @if (!$loop->last)
+                                                              ,
+                                                              @endif
+                                                          @endforeach
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <strong class="mr-1">{{__("Product")}}:</strong>
+                                                        {{$data->currency_code_position == 'left' ? $data->currency_code : ''}}
+                                                        <span>{{(float)$item->product_price}}</span>
+                                                        {{$data->currency_code_position == 'right' ? $data->currency_code : ''}}
+                                                        <br>
+                                                        @if (is_array($variations))
+                                                            <strong class="mr-1">{{__("Variation")}}: </strong>
+                                                            {{$data->currency_code_position == 'left' ? $data->currency_code : ''}}
+                                                            <span>{{(float)$item->variations_price}}</span>
+                                                            {{$data->currency_code_position == 'right' ? $data->currency_code : ''}}
+                                                            <br>
+                                                        @endif
+                                                        @if (is_array($addons))
+                                                            <strong class="mr-1">{{__("Add On's")}}: </strong>
+                                                            {{$data->currency_code_position == 'left' ? $data->currency_code : ''}}
+                                                            <span>{{(float)$item->addons_price}}</span>
+                                                            {{$data->currency_code_position == 'right' ? $data->currency_code : ''}}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{$item->qty}}</td>
+                                                    <td><span>{{$data->currency_code_position == 'left' ? $data->currency_code : ''}}</span> {{$item->total}} <span>{{$data->currency_code_position == 'right' ? $data->currency_code : ''}}</span></td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -151,7 +338,7 @@
                                     </div>
                                     </div>
                                     <div class="edit-account-info">
-                                        <a href="{{ URL::previous() }}" class="btn btn-primary">{{__('back')}}</a>
+                                        <a href="{{ route('user-orders', $data->id) }}" class="btn btn-primary">{{__('back')}}</a>
                                     </div>
                                 </div>
                             </div>

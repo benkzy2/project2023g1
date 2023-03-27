@@ -2,6 +2,11 @@
 <html lang="en" @if($rtl == 1) dir="rtl" @endif>
 
 <head>
+    <!--Start of Google Analytics script-->
+    @if ($bs->is_analytics == 1)
+    {!! $bs->google_analytics_script !!}
+    @endif
+    <!--End of Google Analytics script-->
 
     <!--====== Required meta tags ======-->
     <meta charset="utf-8">
@@ -17,52 +22,14 @@
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="{{asset('assets/front/img/'.$bs->favicon)}}" type="image/png">
 
-    <!--====== Bootstrap css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/bootstrap.min.css')}}">
 
-    <!--====== flaticon css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/flaticon.css')}}">
-
-    <!--====== Magnific Popup css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/magnific-popup.css')}}">
-
-    <!--====== time and date picker ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/jquery-ui.css')}}">
-
-    <!--====== jquery timepicker ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/jquery.timepicker.min.css')}}">
-
-
-    <!--====== nice select css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/nice-select.css')}}">
     <link rel="stylesheet" href="{{asset('assets/front/css/plugin.min.css')}}">
-
-    <!--====== animate css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/animate.min.css')}}">
-
-    <!--====== fontawesome css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/all.min.css')}}">
-
-    <!--====== Slick css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/slick.css')}}">
-
-    <!--====== jQuery UI css ======-->
-    <link rel="stylesheet" href="{{asset('assets/front/css/jquery-ui.min.css')}}">
 
     <!--====== Default css ======-->
 
     <link rel="stylesheet" href="{{asset('assets/front/css/default.css')}}">
 
-    @if ($bs->is_tawkto == 1)
-    <style>
-    .back-to-top {
-        bottom: 50px;
-    }
-    .back-to-top.show {
-        right: 20px;
-    }
-    </style>
-    @endif
+
     @if (count($langs) == 0)
     <style media="screen">
     .support-bar-area ul.social-links li:last-child {
@@ -86,24 +53,62 @@
     @if ($rtl == 1)
     <link rel="stylesheet" href="{{asset('assets/front/css/rtl.css')}}">
     @endif
-
+    @if ($bs->is_tawkto == 1 || $bs->is_whatsapp == 1)
+    <style>
+        .go-top-area .go-top.active {
+            right: auto;
+            left: 20px;
+        }
+    </style>
+    @endif
     @yield('style')
 
+    <!--====== jquery js ======-->
+    <script src="{{asset('assets/front/js/vendor/modernizr-3.6.0.min.js')}}"></script>
+    <script src="{{asset('assets/front/js/vendor/jquery.3.2.1.min.js')}}"></script>
+
+    @if ($bs->is_appzi == 1)
+    <!-- Start of Appzi Feedback Script -->
+    <script async src="https://app.appzi.io/bootstrap/bundle.js?token={{$bs->appzi_token}}"></script>
+    {!! $bs->appzi_script !!}
+    <!-- End of Appzi Feedback Script -->
+    @endif
+
+    <!-- Start of Facebook Pixel Code -->
+    @if ($be->is_facebook_pexel == 1)
+      {!! $be->facebook_pexel_script !!}
+    @endif
+    <!-- End of Facebook Pixel Code -->
+
+    @if ($bs->is_recaptcha == 1)
+    <script type="text/javascript">
+      var onloadCallback = function() {
+        grecaptcha.render('g-recaptcha', {
+          'sitekey' : '{{$bs->google_recaptcha_site_key}}'
+        });
+      };
+    </script>
+    @endif
 </head>
 
 <body>
 
     <!--====== PRELOADER PART START ======-->
-
+    @if ($bs->preloader_status == 1)
     <div id="preloader">
         <div class="loader revolve">
-            <div class="layer">
-                <div class="round"></div>
-            </div>
+            <img src="{{asset('assets/front/img/' . $bs->preloader)}}" alt="">
         </div>
     </div>
-
+    @endif
     <!--====== PRELOADER PART ENDS ======-->
+
+    {{-- Loader --}}
+    <div class="request-loader">
+        <img src="{{asset('assets/admin/img/loader.gif')}}" alt="">
+    </div>
+    {{-- Loader --}}
+
 
     <!--====== HEADER PART START ======-->
 
@@ -183,57 +188,72 @@
                             </button> <!-- navbar toggler -->
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarFive">
                                 <ul class="navbar-nav m-xl-auto mr-auto">
+                                    @php
+                                        $links = json_decode($menus, true);
+                                        //  dd($links);
+                                    @endphp
 
-                                    <li class="nav-item"><a class="page-scroll" href="{{route('front.index')}}">{{__('Home')}}</a>
-                                    </li>
+                                    @foreach ($links as $link)
+                                        @php
+                                            $href = getHref($link);
+                                        @endphp
 
-                                    @if ($bs->menu_page == 1 || $bs->menu_page1 == 1)
-                                    <li class="nav-item"><a class="page-scroll" href="{{route('front.product')}}">{{__('Menu')}}</a>
-                                    @endif
-
-                                    @if ($bs->item_page == 1)
-                                    <li class="nav-item"><a class="page-scroll" href="{{route('front.items')}}">{{__('Items')}}</a>
-                                    @endif
-
-
-                                    @if ($bs->gallery_page == 1 || $bs->gallery_page == 1 || App\Models\Page::where('language_id',$currentLang->id)->where('status',1)->count() > 0)
-                                    <li class="nav-item"><a class="page-scroll" href="#">{{$bs->pages_p_link}} <i class="fa fa-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            @foreach (App\Models\Page::where('language_id',$currentLang->id)->where('status',1)->orderBy('serial_number', 'ASC')->get() as $page)
-                                            <li><a href="{{route('front.dynamicPage',[$page->slug,$page->id])}}">{{$page->name}}</a></li>
-                                            @endforeach
-                                            @if ($bs->gallery_page == 1)
-                                            <li class="nav-item"><a class="page-scroll" href="{{route('front.gallery')}}">{{__('Gallery')}}</a>
+                                        @if (!array_key_exists("children",$link))
+                                            {{--- Level1 links which doesn't have dropdown menus ---}}
+                                            <li class="nav-item"><a class="page-scroll" href="{{$href}}" target="{{$link["target"]}}">{{$link["text"]}}</a>
                                             </li>
-                                            @endif
-                                            @if ($bs->team_page == 1)
-                                            <li class="nav-item"><a class="page-scroll" href="{{route('front.team')}}">{{__('Team')}}</a>
-                                            </li>
-                                            @endif
-                                        </ul>
+                                        @else
+                                            {{--- Level1 links which has dropdown menus ---}}
+                                            <li class="nav-item"><a class="page-scroll" href="{{$href}}" target="{{$link["target"]}}">{{$link["text"]}} <i class="fa fa-angle-down"></i></a>
+
+
+                                            {{-- START: 2nd level links --}}
+                                            <ul class="sub-menu">
+                                                @foreach ($link["children"] as $level2)
+                                                    @php
+                                                        $l2Href = getHref($level2);
+                                                    @endphp
+                                                    <li class="nav-item @if(array_key_exists("children", $level2)) submenus @endif">
+                                                        <a class="page-scroll" href="{{$l2Href}}" target="{{$level2["target"]}}">{{$level2["text"]}}</a>
+
+                                                        {{-- START: 3rd Level links --}}
+                                                        @php
+                                                            if (array_key_exists("children", $level2)) {
+                                                                create_menu($level2);
+                                                            }
+                                                        @endphp
+                                                        {{-- END: 3rd Level links --}}
+
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    @endforeach
+
+
+                                    @if($bs->is_quote)
+                                        <li class="nav-item d-block d-sm-none"><a class="page-scroll" href="{{route('front.reservation')}}">{{__('Reservation')}}</a>
+                                        </li>
+                                    @endif
+                                    @if($bs->website_call_waiter == 1)
+                                    <li class="nav-item d-block d-sm-none"><a class="page-scroll" data-toggle="modal" data-target="#callWaiterModal">{{__('Call Waiter')}}</a>
                                     </li>
                                     @endif
 
-                                    @if ($bs->blog_page == 1)
-                                    <li class="nav-item"><a class="page-scroll" href="{{route('front.blogs')}}">{{__('Blogs')}}</a>
-                                    </li>
-                                    @endif
-
-                                    @if ($bs->contact_page == 1)
-                                    <li class="nav-item"><a class="page-scroll" href="{{route('front.contact')}}">{{__('Contact')}}</a>
-                                    </li>
-                                    @endif
                                 </ul>
                             </div>
 
                             <div class="navbar-btns d-flex align-items-center">
-                                <div class="header-times d-none d-md-inline-block">
+                                <div class="header-times">
                                     <i class="flaticon-time"></i>
                                     <span>{{__('Opening Time')}}</span>
                                     <p>{{$bs->office_time}}</p>
                                 </div>
                                 @if($bs->is_quote)
-                                    <a class="main-btn main-btn-2 d-none d-sm-inline-block" href="{{route('front.reservation')}}">{{__('RESERVATION')}}</a>
+                                    <a class="main-btn main-btn-2 d-none d-sm-inline-block" href="{{route('front.reservation')}}">{{__('Reservation')}}</a>
+                                @endif
+                                @if($bs->website_call_waiter == 1)
+                                    <a class="main-btn main-btn d-none d-sm-inline-block text-white ml-2" data-toggle="modal" data-target="#callWaiterModal">{{__('Call Waiter')}}</a>
                                 @endif
                             </div>
                         </nav> <!-- navbar -->
@@ -246,9 +266,9 @@
     <!--====== HEADER PART ENDS ======-->
 
     @yield('content')
- <!--    announcement banner section start   -->
- <a class="announcement-banner" href="{{asset('assets/front/img/'.$bs->announcement)}}"></a>
- <!--    announcement banner section end   -->
+    {{-- Popups start --}}
+    @includeIf('front.partials.popups')
+    {{-- Popups end --}}
 
 
     <!--====== FOOTER PART START ======-->
@@ -272,7 +292,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 order-3 order-lg-2">
-                        <div class="footer-widget-2 text-left text-sm-center @if(request()->routeIs('front.index')) pt-60 @endif">
+                        <div class="footer-widget-2 text-left text-sm-center >
                             <a href="{{route('front.index')}}"><img src="{{asset('assets/front/img/' . $bs->footer_logo)}}" alt="logo"></a>
                             <ul class="pt-25">
                                 @php
@@ -282,16 +302,16 @@
                                 <li><a href="{{$blink->url}}">{{convertUtf8($blink->name)}}</a></li>
                                 @endforeach
                             </ul>
-                            @if($be->footer_bottom_img)
+                            @if(!empty($be->footer_bottom_img))
                             <a class="pt-30" href="javascript:;">
-                                <img src="{{asset('assets/front/img/'.$be->footer_bottom_img)}}" alt="">
+                                <img class="lazy" data-src="{{asset('assets/front/img/'.$be->footer_bottom_img)}}" alt="">
                             </a>
                             @endif
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6 order-2 order-lg-3">
                         <h3 class="subscribe-title">{{__('Subscribe Here')}}</h3>
-                        <form id="subscribeForm" action="{{route('front.subscribe')}}" method="post" class="subscribe-form">
+                        <form id="footerSubscribe" action="{{route('front.subscribe')}}" method="post" class="subscribe-form subscribeForm">
                             @csrf
                             <div class="subscribe-inputs">
                                 <input name="email" type="text" placeholder="{{__('Enter Your Email')}}">
@@ -347,6 +367,8 @@
 
     <!--====== GO TO TOP PART ENDS ======-->
 
+    {{-- WhatsApp Chat Button --}}
+    <div id="WAButton"></div>
 
     {{-- Cookie alert dialog start --}}
     <div class="cookie">
@@ -354,69 +376,94 @@
     </div>
     {{-- Cookie alert dialog end --}}
 
-    @php
-    $is_announcement = $bs->is_announcement;
-    $announcement_delay = $bs->announcement_delay;
-    @endphp
+    {{-- START: Call Waiter Modal --}}
+    <div class="modal fade" id="callWaiterModal" tabindex="-1" role="dialog" aria-labelledby="callWaiterModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{__('Call Waiter')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @php
+                        $tables = \App\Table::where('status', 1)->get();
+                    @endphp
+                    <form id="callWaiterForm" action="{{route('front.callwaiter')}}" method="GET">
+                        <select class="form-control" name="table" required>
+                            <option value="" disabled selected>{{__('Select a Table')}}</option>
+                            @foreach ($tables as $table)
+                                <option value="{{$table->table_no}}">{{__('Table')}} - {{$table->table_no}}</option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="callWaiterForm" class="btn base-btn text-white">{{__('Call Waiter')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Call Waiter Modal --}}
+
+
     <script>
         "use strict";
+        var mainurl = "{{url('/')}}";
         var lat = '{{$bs->latitude}}';
         var lng = '{{$bs->longitude}}';
-        var is_announcement = {{ $is_announcement }};
-        var announcement_delay = {{ $announcement_delay }};
         var rtl = {{ $rtl }};
         var position = "{{$be->base_currency_symbol_position}}";
         var symbol = "{{$be->base_currency_symbol}}";
+        var textPosition = "{{$be->base_currency_text_position}}";
+        var currText = "{{$be->base_currency_text}}";
+        var vap_pub_key = "{{env('VAPID_PUBLIC_KEY')}}";
     </script>
 
-
-    <!--====== jquery js ======-->
-    <script src="{{asset('assets/front/js/vendor/modernizr-3.6.0.min.js')}}"></script>
-    <script src="{{asset('assets/front/js/vendor/jquery.3.2.1.min.js')}}"></script>
-
-    <!--====== Google Recaptcha ======-->
-    <script src="{{asset('assets/front/js/recaptcha-api.js')}}?" async defer></script>
-
-    <!--====== Bootstrap js ======-->
-    <script src="{{asset('assets/front/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('assets/front/js/popper.min.js')}}"></script>
-
-    <!--====== jQuery UI ======-->
-    <script src="{{asset('assets/front/js/jquery.ui.js')}}"></script>
-
-    <!--====== Slick js ======-->
-    <script src="{{asset('assets/front/js/slick.min.js')}}"></script>
-
-    <!--====== Isotope js ======-->
-    <script src="{{asset('assets/front/js/isotope.pkgd.min.js')}}"></script>
-
-    <!--====== Images Loaded js ======-->
-    <script src="{{asset('assets/front/js/imagesloaded.pkgd.min.js')}}"></script>
-
-    <!--====== wow js ======-->
-    <script src="{{asset('assets/front/js/wow.min.js')}}"></script>
-
-    <!--====== Images Loaded js ======-->
-    <script src="{{asset('assets/front/js/jquery.nice-select.min.js')}}"></script>
-
-    <!--====== Magnific Pz js ======-->
-    <script src="{{asset('assets/front/js/jquery.magnific-popup.min.js')}}"></script>
-    <script src="{{asset('assets/front/js/toastr.min.js')}}"></script>
-
-    <!--====== Ajax Contact js ======-->
-    <script src="{{asset('assets/front/js/toastr.min.js')}}"></script>
-
-
-    <!--====== time and date picker js ======-->
-    <script src="{{asset('assets/front/js/jquery-ui.min.js')}}"></script>
-    <script src="{{asset('assets/front/js/jquery.timepicker.min.js')}}"></script>
-
-    <!--====== Cart js ======-->
-    <script src="{{asset('assets/front/js/cart.js')}}"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
+    <!--====== Plugin min js ======-->
+    <script src="{{asset('assets/front/js/plugin.min.js')}}"></script>
+    <!--====== Push Notification js ======-->
+    <script src="{{asset('assets/front/js/enable-push.js')}}" defer></script>
     <!--====== Misc js ======-->
     <script src="{{asset('assets/front/js/misc.js')}}"></script>
     <!--====== Main js ======-->
     <script src="{{asset('assets/front/js/main.js')}}"></script>
+    <!--====== Cart js ======-->
+    <script src="{{asset('assets/front/js/cart.js')}}"></script>
+
+      {{-- whatsapp init code --}}
+      @if ($bs->is_whatsapp == 1)
+        <script type="text/javascript">
+            var whatsapp_popup = {{$bs->whatsapp_popup}};
+            var whatsappImg = "{{asset('assets/front/img/whatsapp.svg')}}";
+            $(function () {
+                $('#WAButton').floatingWhatsApp({
+                    phone: "{{$bs->whatsapp_number}}", //WhatsApp Business phone number
+                    headerTitle: "{{$bs->whatsapp_header_title}}", //Popup Title
+                    popupMessage: `{!! nl2br($bs->whatsapp_popup_message) !!}`, //Popup Message
+                    showPopup: whatsapp_popup == 1 ? true : false, //Enables popup display
+                    buttonImage: '<img src="' + whatsappImg + '" />', //Button Image
+                    position: "right" //Position: left | right
+
+                });
+            });
+        </script>
+      @endif
+
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        });
+    </script>
+
     @yield('script')
 
     @if (session()->has('success'))
@@ -440,6 +487,17 @@
     </script>
     @endif
 
+    <!--Start of Tawk.to script-->
+    @if ($bs->is_tawkto == 1)
+    {!! $bs->tawk_to_script !!}
+    @endif
+    <!--End of Tawk.to script-->
+
+    <!--Start of AddThis script-->
+    @if ($bs->is_addthis == 1)
+    {!! $bs->addthis_script !!}
+    @endif
+    <!--End of AddThis script-->
 </body>
 
 </html>

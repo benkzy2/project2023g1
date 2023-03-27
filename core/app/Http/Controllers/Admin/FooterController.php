@@ -89,4 +89,20 @@ class FooterController extends Controller
         Session::flash('success', 'Footer text updated successfully!');
         return "success";
     }
+
+    public function removeImage(Request $request) {
+        $type = $request->type;
+        $langid = $request->language_id;
+
+        $be = BasicExtended::where('language_id', $langid)->firstOrFail();
+
+        if ($type == "bottom") {
+            @unlink("assets/front/img/" . $be->footer_bottom_img);
+            $be->footer_bottom_img = NULL;
+            $be->save();
+        }
+
+        $request->session()->flash('success', 'Image removed successfully!');
+        return "success";
+    }
 }

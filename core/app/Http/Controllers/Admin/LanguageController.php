@@ -157,28 +157,6 @@ class LanguageController extends Controller
 
             }
 
-            // create hero_bg image using default language image & save unique name in database
-            if ($key == 'hero_bg') {
-                // take default lang image
-                $dimg = url('/assets/front/img/') .'/'. $dbs->hero_bg;
-
-                // copy paste the default language image with different unique name
-                $filename = uniqid();
-                if (($pos = strpos($dbs->hero_bg, ".")) !== FALSE) {
-                    $ext = substr($dbs->hero_bg, $pos+1);
-                }
-                $newImgName = $filename . '.' . $ext;
-
-                @copy($dimg, 'assets/front/img/'.$newImgName);
-
-                // save the unique name in database
-                $bs[$key] = $newImgName;
-
-                // continue the loop
-                continue;
-
-            }
-
             // create intro_bg image using default language image & save unique name in database
             if ($key == 'intro_bg') {
                 // take default lang image
@@ -272,7 +250,8 @@ class LanguageController extends Controller
         $bs['language_id'] = $lang->id;
         $bs->save();
 
-        // duplicate First row of basic_settings for current language
+        // duplicate First row of basic_extendeds for current language
+        $dbe = Language::where('is_default', 1)->first()->basic_extended;
         $be = BE::firstOrFail();
         $cols = json_decode($be, true);
         $be = new BE;
@@ -281,6 +260,73 @@ class LanguageController extends Controller
             if ($key == 'id') {
                 continue;
             }
+
+            // create hero image using default language image & save unique name in database
+            if ($key == 'hero_bg') {
+                // take default lang image
+                $dimg = url('/assets/front/img/') .'/'. $dbe->hero_bg;
+
+                // copy paste the default language image with different unique name
+                $filename = uniqid();
+                if (($pos = strpos($dbe->hero_bg, ".")) !== FALSE) {
+                    $ext = substr($dbe->hero_bg, $pos+1);
+                }
+                $newImgName = $filename . '.' . $ext;
+
+                @copy($dimg, 'assets/front/img/'.$newImgName);
+
+                // save the unique name in database
+                $be[$key] = $newImgName;
+
+                // continue the loop
+                continue;
+
+            }
+
+            // create hero image using default language image & save unique name in database
+            if ($key == 'hero_shape_image') {
+                // take default lang image
+                $dimg = url('/assets/front/img/') .'/'. $dbe->hero_shape_image;
+
+                // copy paste the default language image with different unique name
+                $filename = uniqid();
+                if (($pos = strpos($dbe->hero_shape_image, ".")) !== FALSE) {
+                    $ext = substr($dbe->hero_shape_image, $pos+1);
+                }
+                $newImgName = $filename . '.' . $ext;
+
+                @copy($dimg, 'assets/front/img/'.$newImgName);
+
+                // save the unique name in database
+                $be[$key] = $newImgName;
+
+                // continue the loop
+                continue;
+
+            }
+
+            // create hero image using default language image & save unique name in database
+            if ($key == 'hero_bottom_image') {
+                // take default lang image
+                $dimg = url('/assets/front/img/') .'/'. $dbe->hero_bottom_image;
+
+                // copy paste the default language image with different unique name
+                $filename = uniqid();
+                if (($pos = strpos($dbe->hero_bottom_image, ".")) !== FALSE) {
+                    $ext = substr($dbe->hero_bottom_image, $pos+1);
+                }
+                $newImgName = $filename . '.' . $ext;
+
+                @copy($dimg, 'assets/front/img/'.$newImgName);
+
+                // save the unique name in database
+                $be[$key] = $newImgName;
+
+                // continue the loop
+                continue;
+
+            }
+
             $be[$key] = $value;
         }
         $be['language_id'] = $lang->id;
@@ -382,7 +428,7 @@ class LanguageController extends Controller
             session()->forget('lang');
         }
 
-        // deleting basic_settings and basic_extended for corresponding language
+        // deleting basic_settings and basic_extended for corresponding language & unlink images
         $bs = $la->basic_setting;
         if (!empty($bs)) {
 
@@ -393,8 +439,6 @@ class LanguageController extends Controller
             @unlink('assets/front/img/' . $bs->breadcrumb);
 
             @unlink('assets/front/img/' . $bs->announcement);
-
-            @unlink('assets/front/img/' . $bs->hero_bg);
 
             @unlink('assets/front/img/' . $bs->intro_bg);
 
@@ -408,6 +452,7 @@ class LanguageController extends Controller
         }
         $be = $la->basic_extended;
         if (!empty($be)) {
+            @unlink('assets/front/img/' . $be->hero_bg);
             $be->delete();
         }
 
@@ -452,6 +497,23 @@ class LanguageController extends Controller
             $features = $la->features;
             foreach ($features as $feature) {
                 $feature->delete();
+            }
+        }
+
+        // deleting job categories for corresponding language
+        if (!empty($la->jcategories)) {
+            $jcategories = $la->jcategories;
+            foreach ($jcategories as $jcategory) {
+                $jcategory->delete();
+            }
+        }
+
+
+        // deleting jobs for corresponding language
+        if (!empty($la->jobs)) {
+            $jobs = $la->jobs;
+            foreach ($jobs as $job) {
+                $job->delete();
             }
         }
 
@@ -514,10 +576,30 @@ class LanguageController extends Controller
             }
         }
 
-
         // deleting useful links for corresponding language
         if (!empty($la->ulinks)) {
             $la->ulinks()->delete();
+        }
+
+        // deleting faqs for corresponding language
+        if (!empty($la->faqs)) {
+            $la->faqs()->delete();
+        }
+
+        // deleting menus for corresponding language
+        if (!empty($la->menus)) {
+            $la->menus()->delete();
+        }
+
+        // deleting inputs for corresponding language
+        if (!empty($la->reservation_inputs)) {
+            $ins = $la->reservation_inputs;
+            foreach ($ins as $in) {
+                if ($in->reservation_input_options()->count() > 0) {
+                    $in->reservation_input_options()->delete();
+                }
+                $in->delete();
+            }
         }
 
         // if the the deletable language is the currently selected language in frontend then forget the selected language from session

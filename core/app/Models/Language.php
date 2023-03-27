@@ -16,7 +16,9 @@ class Language extends Model
         return $this->hasOne('App\Models\BasicExtended', 'language_id');
     }
 
-
+    public function menus() {
+        return $this->hasMany('App\Models\Menu');
+    }
 
     public function sliders() {
         return $this->hasMany('App\Models\Slider');
@@ -43,14 +45,13 @@ class Language extends Model
         return $this->hasMany('App\Models\Page');
     }
 
-
-
-
     public function galleries() {
         return $this->hasMany('App\Models\Gallery');
     }
 
-
+    public function faqs() {
+        return $this->hasMany('App\Models\Faq');
+    }
 
     public function bcategories() {
         return $this->hasMany('App\Models\Bcategory');
@@ -60,11 +61,17 @@ class Language extends Model
         return $this->hasMany('App\Models\Blog');
     }
 
+    public function jcategories() {
+        return $this->hasMany('App\Models\Jcategory');
+    }
 
-  
+    public function jobs() {
+        return $this->hasMany('App\Models\Job');
+    }
 
-  
-
+    public function reservation_inputs() {
+        return $this->hasMany('App\Models\ReservationInput');
+    }
 
     public function products(){
         return $this->hasMany('App\Models\Product');
@@ -74,5 +81,9 @@ class Language extends Model
     }
     public function pcategories(){
         return $this->hasMany('App\Models\Pcategory');
+    }
+
+    public function popups() {
+        return $this->hasMany('App\Models\Popup');
     }
 }

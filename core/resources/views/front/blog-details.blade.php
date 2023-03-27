@@ -4,7 +4,7 @@
 @section('content')
     <!--====== PAGE TITLE PART START ======-->
 
-    <section class="page-title-area d-flex align-items-center" style="background-image:url('{{asset('assets/front/img/'.$bs->breadcrumb)}}')">
+    <section class="page-title-area d-flex align-items-center lazy" data-bg="{{asset('assets/front/img/'.$bs->breadcrumb)}}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -33,7 +33,7 @@
                 <div class="col-lg-8">
                     <div class="blog-details-items mt-50">
                         <div class="blog-thumb">
-                            <img src="{{asset('assets/front/img/blogs/'.$blog->main_image)}}" alt="blog">
+                            <img class="lazy wow fadeIn" data-src="{{asset('assets/front/img/blogs/'.$blog->main_image)}}" alt="blog" data-wow-delay="1s">
                         </div>
                         <div class="blog-details-content">
                             <h2 class="title">{{convertUtf8($blog->title)}}</h2>
@@ -53,9 +53,9 @@
                         </div>
 
                         <div class="blog-details-comment">
-                                <div class="comment-lists">
-                                    <div id="disqus_thread"></div>
-                                  </div>
+                            <div class="comment-lists">
+                                <div id="disqus_thread"></div>
+                            </div>
                         </div> <!-- blog details comment -->
                     </div>
                 </div>
@@ -82,4 +82,11 @@
     <!--====== BLOG DETAILS PART ENDS ======-->
 
 
+@endsection
+
+
+@section('script')
+@if($bs->is_disqus == 1)
+{!! $bs->disqus_script !!}
+@endif
 @endsection

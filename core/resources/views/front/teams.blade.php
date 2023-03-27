@@ -3,7 +3,7 @@
 @section('content')
     <!--====== PAGE TITLE PART START ======-->
 
-    <section class="page-title-area d-flex align-items-center" style="background-image:url('{{asset('assets/front/img/'.$bs->breadcrumb)}}')">
+    <section class="page-title-area d-flex align-items-center lazy" data-bg="{{asset('assets/front/img/'.$bs->breadcrumb)}}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -32,8 +32,8 @@
             <div class="row justify-content-center">
                 <div class="col-lg-4">
                     <div class="section-title text-center">
-                        <span>{{__('Teams')}} <img src="{{asset('assets/front/img/title-icon.png')}}" alt=""></span>
-                        <h3 class="title">{{__('Exparts Our Team')}}</h3>
+                        <span>{{convertUtf8($bs->team_section_title)}} <img class="lazy" data-src="{{asset('assets/front/img/title-icon.png')}}" alt=""></span>
+                        <h3 class="title">{{convertUtf8($bs->team_section_subtitle)}}</h3>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                 <div class="col-lg-4 col-md-7 col-sm-9">
                     <div class="single-team mt-30">
                         <div class="team-thumb">
-                            <img src="{{asset('assets/front/img/members/'.$item->image)}}" alt="team">
+                            <img class="lazy wow fadeIn" data-src="{{asset('assets/front/img/members/'.$item->image)}}" alt="team" data-wow-delay=".5s">
                             <div class="team-overlay">
                                 <div class="link">
                                     <a><i class="flaticon-add"></i></a>

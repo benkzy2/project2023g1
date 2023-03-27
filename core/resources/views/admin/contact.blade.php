@@ -33,6 +33,12 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Contact Page</a>
       </li>
     </ul>
@@ -62,7 +68,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
             <div class="row">
               <div class="col-lg-6 offset-lg-3">
                 @csrf
-              
+
                 <div class="form-group">
                   <label>Form Title **</label>
                   <input class="form-control" name="contact_form_title" value="{{$abs->contact_form_title}}" placeholder="Enter form Titlte">
@@ -77,14 +83,8 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                     <p class="mb-0 text-danger">{{$errors->first('contact_info_title')}}</p>
                   @endif
                 </div>
-               
-                <div class="form-group">
-                  <label>Address **</label>
-                  <input class="form-control" data-role="tagsinput" name="contact_address" value="{{$abs->contact_address}}" placeholder="Enter Address">
-                  @if ($errors->has('contact_address'))
-                    <p class="mb-0 text-danger">{{$errors->first('contact_address')}}</p>
-                  @endif
-                </div>
+
+
                 <div class="form-group">
                   <label>Contact Information Text **</label>
                   <input class="form-control" name="contact_text" value="{{$abs->contact_text}}" placeholder="Enter Information text">
@@ -93,34 +93,57 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                   @endif
                 </div>
 
-               
-                <div class="form-group">
-                  <label>Phone **</label>
-                  <input class="form-control" data-role="tagsinput" name="contact_number" value="{{$abs->contact_number}}" placeholder="Enter Phone Number">
-                  @if ($errors->has('contact_number'))
-                    <p class="mb-0 text-danger">{{$errors->first('contact_number')}}</p>
-                  @endif
-                </div>
-                <div class="form-group">
-                  <label>Email **</label>
-                  <input class="form-control ltr"  name="contact_mail" value="{{$abe->to_mail}}" readonly>
-                  <div class="text-warning">You cannot upadate Email Address from here, you can update it from <a class="text-" href="{{route('admin.mailToAdmin')}}"><u>Basic Settings > Email Settings > Mail To Admin</u></a></p></div>
-                </div>
 
                 <div class="form-group">
-                  <label>Latitude **</label>
-                  <input class="form-control ltr" name="latitude" value="{{$abs->latitude}}" placeholder="Enter Latitude">
-                  @if ($errors->has('latitude'))
-                    <p class="mb-0 text-danger">{{$errors->first('latitude')}}</p>
-                  @endif
-                </div>
-                <div class="form-group">
-                  <label>Longitude **</label>
-                  <input class="form-control ltr" name="longitude" value="{{$abs->longitude}}" placeholder="Enter Longitude">
-                  @if ($errors->has('longitude'))
-                    <p class="mb-0 text-danger">{{$errors->first('longitude')}}</p>
-                  @endif
-                </div>
+                    <label>Address **</label>
+                    <textarea class="form-control" name="contact_address" rows="3">{{$abs->contact_address}}</textarea>
+                    <p class="mb-0 text-warning">Use newline to seperate multiple addresses.</p>
+                    @if ($errors->has('contact_address'))
+                      <p class="mb-0 text-danger">{{$errors->first('contact_address')}}</p>
+                    @endif
+                  </div>
+
+                  <div class="form-group">
+                    <label>Phone **</label>
+                    <input class="form-control" name="contact_number" data-role="tagsinput" value="{{$abs->contact_number}}" placeholder="Enter Phone Number">
+                    <p class="mb-0 text-warning">Use comma (,) to seperate multiple contact numbers.</p>
+                    @if ($errors->has('contact_number'))
+                      <p class="mb-0 text-danger">{{$errors->first('contact_number')}}</p>
+                    @endif
+                  </div>
+
+                  <div class="form-group">
+                    <label>Email **</label>
+                    <input class="form-control ltr" name="contact_mails" data-role="tagsinput" value="{{$abs->contact_mails}}" placeholder="Enter Email Address">
+                    <p class="mb-0 text-warning">Use comma (,) to seperate multiple contact mails.</p>
+                    @if ($errors->has('contact_mails'))
+                      <p class="mb-0 text-danger">{{$errors->first('contact_mails')}}</p>
+                    @endif
+                  </div>
+
+                  <div class="form-group">
+                    <label>Latitude </label>
+                    <input class="form-control" name="latitude" value="{{$abs->latitude}}" placeholder="Enter Google Map Address">
+                    @if ($errors->has('latitude'))
+                      <p class="mb-0 text-danger">{{$errors->first('latitude')}}</p>
+                    @endif
+                  </div>
+
+                  <div class="form-group">
+                    <label>Longitude</label>
+                    <input class="form-control" name="longitude" value="{{$abs->longitude}}" placeholder="Enter Google Map Address">
+                    @if ($errors->has('longitude'))
+                      <p class="mb-0 text-danger">{{$errors->first('longitude')}}</p>
+                    @endif
+                  </div>
+
+                  <div class="form-group">
+                    <label>Map Zoom</label>
+                    <input class="form-control" name="map_zoom" value="{{$abs->map_zoom}}" placeholder="Enter Google Map Address">
+                    @if ($errors->has('map_zoom'))
+                      <p class="mb-0 text-danger">{{$errors->first('map_zoom')}}</p>
+                    @endif
+                  </div>
               </div>
             </div>
           </div>

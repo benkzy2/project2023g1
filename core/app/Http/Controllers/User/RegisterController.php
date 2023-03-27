@@ -4,17 +4,11 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Helpers\MegaMailer;
 use App\Models\User;
 use Auth;
-use Validator;
 use Session;
 use App\Models\Language;
-use DB;
-use App;
 use Config;
 use App\Models\BasicSetting as BS;
 use App\Models\BasicExtended as BE;
@@ -76,50 +70,19 @@ class RegisterController extends Controller
         $user->fill($input)->save();
 
 
-        // Send Mail to Buyer
-        $mail = new PHPMailer(true);
-        $user = Auth::user();
+        $mailer = new MegaMailer();
+        $data = [
+            'toMail' => $user->email,
+            'toName' => $user->fname,
+            'customer_name' => $user->fname,
+            'verification_link' => "<a href='" . url('register/verify/' . $token) . "'>" . url('register/verify/' . $token) . "</a>",
+            'website_title' => $bs->website_title,
+            'templateType' => 'email_verification',
+            'type' => 'emailVerification'
+        ];
+        $mailer->mailFromAdmin($data);
 
-        if ($be->is_smtp == 1) {
-            try {
-                $mail->isSMTP();
-                $mail->Host       = $be->smtp_host;
-                $mail->SMTPAuth   = true;
-                $mail->Username   = $be->smtp_username;
-                $mail->Password   = $be->smtp_password;
-                $mail->SMTPSecure = $be->encryption;
-                $mail->Port       = $be->smtp_port;
-
-                //Recipients
-                $mail->setFrom($be->from_mail, $be->from_name);
-                $mail->addAddress($request->email, $request->username);
-
-                // Content
-                $mail->isHTML(true);
-
-                $mail->Subject = "Verify your email address.";
-                $mail->Body    = "Dear Customer,<br> We noticed that you need to verify your email address. <a href=" . url('register/verify/' . $token) . ">Simply click here to verify. </a>";
-                $mail->send();
-
-                return back()->with('sendmail', 'A verifican mail has been sent to your email address.');
-            } catch (Exception $e) { }
-        } else {
-            try {
-
-                //Recipients
-                $mail->setFrom($be->from_mail, $be->from_name);
-                $mail->addAddress($request->email, $user->username);
-
-                // Content
-                $mail->isHTML(true);
-                $mail->Subject = "Verify your email address.";
-                $mail->Body    = "Dear Customer,<br> We noticed that you need to verify your email address. <a href=" . url('register/verify/' . $token) . ">Simply click here to verify. </a>";
-
-                $mail->send();
-            } catch (Exception $e) { }
-
-            return back()->with('sendmail', 'We need to verify your email address. We have sent an email to  ' . $request->email . ' to verify your email address. Please click link in that email to continue.');
-        }
+        return back()->with('sendmail', 'We need to verify your email address. We have sent an email to  ' . $request->email . ' to verify your email address. Please click link in that email to continue.');
     }
 
 

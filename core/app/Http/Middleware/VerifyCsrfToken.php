@@ -19,6 +19,10 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        '/product/paytm/notify*',
+        '/product/flutterwave/notify',
+        '/product/razorpay/notify',
+        '/product/payumoney/notify',
+        '/product/mercadopago/notify'
     ];
 }

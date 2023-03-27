@@ -22,7 +22,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
 
 @section('content')
   <div class="page-header">
-    <h4 class="page-title">Gallery Images</h4>
+    <h4 class="page-title">Gallery</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="{{route('admin.dashboard')}}">
@@ -33,7 +33,13 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Gallery Image Management</a>
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Gallery</a>
       </li>
     </ul>
   </div>
@@ -69,7 +75,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                 <h3 class="text-center">NO IMAGE FOUND</h3>
               @else
                 <div class="table-responsive">
-                  <table class="table table-striped mt-3">
+                  <table class="table table-striped mt-3" id="basic-datatables">
                     <thead>
                       <tr>
                         <th scope="col">
@@ -117,13 +123,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
             </div>
           </div>
         </div>
-        <div class="card-footer">
-          <div class="row">
-            <div class="d-inline-block mx-auto">
-              {{$galleries->appends(['language' => request()->input('language')])->links()}}
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>

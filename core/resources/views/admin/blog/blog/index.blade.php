@@ -30,10 +30,10 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
          </a>
       </li>
       <li class="separator">
-         <i class="flaticon-right-arrow"></i>
+        <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-         <a href="#">Blog Page</a>
+        <a href="#">Website Pages</a>
       </li>
       <li class="separator">
          <i class="flaticon-right-arrow"></i>
@@ -74,7 +74,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                   <h3 class="text-center">NO BLOG FOUND</h3>
                   @else
                   <div class="table-responsive">
-                     <table class="table table-striped mt-3">
+                     <table class="table table-striped mt-3" id="basic-datatables">
                         <thead>
                            <tr>
                               <th scope="col">
@@ -131,13 +131,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                </div>
             </div>
          </div>
-         <div class="card-footer">
-            <div class="row">
-               <div class="d-inline-block mx-auto">
-                  {{$blogs->appends(['language' => request()->input('language')])->links()}}
-               </div>
-            </div>
-         </div>
+
       </div>
    </div>
 </div>

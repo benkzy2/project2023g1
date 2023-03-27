@@ -21,7 +21,7 @@ class IntrosectionController extends Controller
 
     public function update(Request $request, $langid)
     {
-        
+
 
         $main_image = $request->file('intro_main_image');
         $signature = $request->file('intro_signature');
@@ -30,7 +30,7 @@ class IntrosectionController extends Controller
         $allowedExts = array('jpg', 'png', 'jpeg');
 
         $rules = [
-           
+
             'intro_title' => 'required',
             'intro_text' => 'required',
             'intro_main_image' => [
@@ -100,10 +100,26 @@ class IntrosectionController extends Controller
             $input['intro_video_image'] = $video_name;
         }
 
-        
+
         $bs->update($input);
 
         Session::flash('success', 'data updated successfully!');
+        return "success";
+    }
+
+    public function removeImage(Request $request) {
+        $type = $request->type;
+        $langid = $request->language_id;
+
+        $bs = BS::where('language_id', $langid)->firstOrFail();
+
+        if ($type == "signature") {
+            @unlink("assets/front/img/" . $bs->intro_signature);
+            $bs->intro_signature = NULL;
+            $bs->save();
+        }
+
+        $request->session()->flash('success', 'Image removed successfully!');
         return "success";
     }
 }

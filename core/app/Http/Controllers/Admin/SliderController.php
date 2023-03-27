@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\BasicExtended;
 use App\Models\Slider;
 use App\Models\Language;
 use Validator;
@@ -17,10 +18,10 @@ class SliderController extends Controller
 
         $lang_id = $lang->id;
         $data['sliders'] = Slider::where('language_id', $lang_id)->orderBy('id', 'DESC')->get();
-           
-       
+
+
         $data['abe'] = $lang->basic_extended;
-       
+
 
         $data['lang_id'] = $lang_id;
         return view('admin.home.hero.slider.index', $data);
@@ -37,13 +38,17 @@ class SliderController extends Controller
     {
         $m_image = $request->file('main_image');
         $bg_img = $request->file('bg_image');
-        
+
         $allowedExts = array('jpg', 'png', 'jpeg');
 
         $rules = [
             'language_id' => 'required',
             'title' => 'required|max:255',
+            'title_font_size' => 'required|numeric|digits_between:1,3',
             'text' => 'required|max:255',
+            'text_font_size' => 'required|numeric|digits_between:1,3',
+            'button_text_font_size' => 'required|numeric|digits_between:1,3',
+            'button_text1_font_size' => 'required|numeric|digits_between:1,3',
             'serial_number' => 'required|integer',
 
             'main_image' => [
@@ -67,7 +72,7 @@ class SliderController extends Controller
                     }
                 },
             ],
-            
+
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -89,7 +94,7 @@ class SliderController extends Controller
             $request->file('bg_image')->move('assets/front/img/sliders/bg_image/', $bg_image);
             $input['bg_image'] = $bg_image;
         }
-        
+
 
 
         $slider = new Slider;
@@ -107,7 +112,11 @@ class SliderController extends Controller
 
         $rules = [
             'title' => 'required|max:255',
+            'title_font_size' => 'required|numeric|digits_between:1,3',
             'text' => 'required|max:255',
+            'text_font_size' => 'required|numeric|digits_between:1,3',
+            'button_text_font_size' => 'required|numeric|digits_between:1,3',
+            'button_text1_font_size' => 'required|numeric|digits_between:1,3',
             'serial_number' => 'required|integer',
 
             'main_image' => [
@@ -131,7 +140,7 @@ class SliderController extends Controller
                     }
                 },
             ],
-            
+
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -160,7 +169,7 @@ class SliderController extends Controller
             $input['bg_image'] = $bg_image;
         }
 
-        
+
 
 
         $slider->update($input);
@@ -174,10 +183,33 @@ class SliderController extends Controller
         $slider = Slider::findOrFail($request->slider_id);
         @unlink('assets/front/img/sliders/' . $slider->image);
         @unlink('assets/front/img/sliders/bg_image/' . $slider->bg_image);
-        
+
         $slider->delete();
 
         Session::flash('success', 'Slider deleted successfully!');
         return back();
+    }
+
+
+    public function removeImage(Request $request) {
+        $type = $request->type;
+        $langid = $request->language_id;
+
+        $be = BasicExtended::where('language_id', $langid)->firstOrFail();
+
+        if ($type == "shape") {
+            @unlink("assets/front/img/" . $be->slider_shape_img);
+            $be->slider_shape_img = NULL;
+            $be->save();
+        }
+
+        if ($type == "bottom") {
+            @unlink("assets/front/img/" . $be->slider_bottom_img);
+            $be->slider_bottom_img = NULL;
+            $be->save();
+        }
+
+        $request->session()->flash('success', 'Image removed successfully!');
+        return "success";
     }
 }

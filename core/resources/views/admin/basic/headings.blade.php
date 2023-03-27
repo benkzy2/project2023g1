@@ -29,7 +29,7 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Basic Settings</a>
+        <a href="#">Settings</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
@@ -72,7 +72,7 @@
                     <p class="mb-0 text-danger">{{$errors->first('menu_title')}}</p>
                   @endif
                 </div>
-              
+
                 <div class="form-group">
                   <label>Items Title **</label>
                   <input class="form-control" name="items_title" value="{{$abs->items_title}}">
@@ -87,7 +87,7 @@
                     <p class="mb-0 text-danger">{{$errors->first('menu_details_title')}}</p>
                   @endif
                 </div>
-            
+
                 <div class="form-group">
                   <label>Cart Title **</label>
                   <input class="form-control" name="cart_title" value="{{$abs->cart_title}}">
@@ -95,7 +95,7 @@
                     <p class="mb-0 text-danger">{{$errors->first('cart_title')}}</p>
                   @endif
                 </div>
-                
+
                 <div class="form-group">
                   <label>Checkout Title **</label>
                   <input class="form-control" name="checkout_title" value="{{$abs->checkout_title}}">
@@ -103,7 +103,7 @@
                     <p class="mb-0 text-danger">{{$errors->first('checkout_title')}}</p>
                   @endif
                 </div>
-            
+
 
                 <div class="form-group">
                   <label>Blog Title **</label>
@@ -112,7 +112,7 @@
                     <p class="mb-0 text-danger">{{$errors->first('blog_title')}}</p>
                   @endif
                 </div>
-              
+
                 <div class="form-group">
                   <label>Blog Details Title **</label>
                   <input class="form-control" name="blog_details_title" value="{{$abs->blog_details_title}}">
@@ -120,11 +120,36 @@
                     <p class="mb-0 text-danger">{{$errors->first('blog_details_title')}}</p>
                   @endif
                 </div>
+
+                <div class="form-group">
+                  <label>Career Title **</label>
+                  <input class="form-control" name="career_title" value="{{$abe->career_title}}">
+                  @if ($errors->has('career_title'))
+                    <p class="mb-0 text-danger">{{$errors->first('career_title')}}</p>
+                  @endif
+                </div>
+
+                <div class="form-group">
+                  <label>Career Details Title **</label>
+                  <input class="form-control" name="career_details_title" value="{{$abe->career_details_title}}">
+                  @if ($errors->has('career_details_title'))
+                    <p class="mb-0 text-danger">{{$errors->first('career_details_title')}}</p>
+                  @endif
+                </div>
+
                 <div class="form-group">
                   <label>Gallery Title **</label>
                   <input class="form-control" name="gallery_title" value="{{$abs->gallery_title}}">
                   @if ($errors->has('gallery_title'))
                     <p class="mb-0 text-danger">{{$errors->first('gallery_title')}}</p>
+                  @endif
+                </div>
+
+                <div class="form-group">
+                  <label>FAQ Title **</label>
+                  <input class="form-control" name="faq_title" value="{{$abe->faq_title}}">
+                  @if ($errors->has('faq_title'))
+                    <p class="mb-0 text-danger">{{$errors->first('faq_title')}}</p>
                   @endif
                 </div>
 
@@ -143,8 +168,8 @@
                     <p class="mb-0 text-danger">{{$errors->first('reservation_title')}}</p>
                   @endif
                 </div>
-            
-          
+
+
                 <div class="form-group">
                   <label>Contact Title **</label>
                   <input class="form-control" name="contact_title" value="{{$abs->contact_title}}">
@@ -152,8 +177,8 @@
                     <p class="mb-0 text-danger">{{$errors->first('contact_title')}}</p>
                   @endif
                 </div>
-            
-              
+
+
                 <div class="form-group">
                   <label>Error Page Title **</label>
                   <input class="form-control" name="error_title" value="{{$abs->error_title}}">
@@ -162,7 +187,7 @@
                   @endif
                 </div>
 
-              
+
               </div>
             </div>
           </div>

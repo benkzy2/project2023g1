@@ -23,7 +23,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
 
 @section('content')
   <div class="page-header">
-    <h4 class="page-title">Shipping Charge</h4>
+    <h4 class="page-title">Shipping Charges</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="{{route('admin.dashboard')}}">
@@ -34,13 +34,13 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Shipping</a>
+        <a href="#">Order Management</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Shipping Charge</a>
+        <a href="#">Shipping Charges</a>
       </li>
     </ul>
   </div>
@@ -51,7 +51,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         <div class="card-header">
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="card-title d-inline-block">Shipping Charge</div>
+                    <div class="card-title d-inline-block">Shipping Charges</div>
                 </div>
                 <div class="col-lg-3">
                     @if (!empty($langs))
@@ -70,6 +70,14 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         </div>
         <div class="card-body">
           <div class="row">
+              <div class="col-12">
+                  <div class="alert alert-warning text-dark text-center">
+                      <h5 class="mb-0">This page will be available if 'postal code' is disabled by <strong>Admin (Order Management > Settings)</strong>. For demo version we are always showing this page.</h5>
+                  </div>
+                  <div class="alert alert-warning text-dark text-center">
+                    <h5 class="mb-0">If you dont want to show any shipping charge in checkout page, then don't add any shipping charge here</h5>
+                  </div>
+              </div>
             <div class="col-lg-12">
               @if (count($shippings) == 0)
                 <h3 class="text-center">No Shipping Charge</h3>
@@ -175,6 +183,12 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
               <label for="">Charge ({{$be->base_currency_text}}) **</label>
               <input type="text" class="form-control" name="charge" value="" placeholder="Enter charge">
               <p id="errcharge" class="mb-0 text-danger em"></p>
+            </div>
+            <div class="form-group">
+              <label for="">Minimum Order Amount For Free Delivery ({{$be->base_currency_text}})</label>
+              <input type="text" class="form-control ltr" name="free_delivery_amount" value="" placeholder="Enter Minimum Order Amount For Free Delivery">
+              <p class="mb-0 text-warning">If dont want 'Free Delivery' , then please leave it blank</p>
+              <p id="errfree_delivery_amount" class="mb-0 text-danger em"></p>
             </div>
 
 

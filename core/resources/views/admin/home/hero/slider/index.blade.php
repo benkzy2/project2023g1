@@ -13,6 +13,12 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Home Page</a>
       </li>
       <li class="separator">
@@ -56,25 +62,31 @@
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="form-group">
-                      <div class="col-6 mb-2">
+                      <div class="mb-2">
                         <label for="image"><strong> Shape Image</strong></label>
                       </div>
-                      <div class="col-md-6 slider_shape_img mb-3">
-                        <img src="{{ $abe->slider_shape_img ? asset('assets/front/img/'.$abe->slider_shape_img) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
+                      <div class="showImage mb-3">
+                        @if (!empty($abe->slider_shape_img))
+                        <a class="remove-image" data-type="shape"><i class="far fa-times-circle"></i></a>
+                        @endif
+                        <img src="{{ !empty($abe->slider_shape_img) ? asset('assets/front/img/'.$abe->slider_shape_img) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail w-100">
                       </div>
-                      <input type="file" name="slider_shape_img" id="slider_shape_img" class="form-control image">
+                      <input type="file" name="slider_shape_img" class="form-control image">
                       <p id="errslider_shape_img" class="mb-0 text-danger em"></p>
                     </div>
                   </div>
                   <div class="col-lg-6">
                     <div class="form-group">
-                      <div class="col-6 mb-2">
+                      <div class="mb-2">
                         <label for="image"><strong> Bottom Image</strong></label>
                       </div>
-                      <div class="col-md-6 slider_bottom_img mb-3">
-                        <img src="{{ $abe->slider_bottom_img ? asset('assets/front/img/'.$abe->slider_bottom_img) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
+                      <div class="showImage mb-3">
+                        @if (!empty($abe->slider_bottom_img))
+                        <a class="remove-image" data-type="bottom"><i class="far fa-times-circle"></i></a>
+                        @endif
+                        <img src="{{ $abe->slider_bottom_img ? asset('assets/front/img/'.$abe->slider_bottom_img) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail w-100">
                       </div>
-                      <input type="file" name="slider_bottom_img" id="slider_bottom_img" class="form-control image">
+                      <input type="file" name="slider_bottom_img" class="form-control image">
                       <p id="errslider_bottom_img" class="mb-0 text-danger em"></p>
                     </div>
                   </div>
@@ -155,7 +167,7 @@
 
   <!-- Create Slider Modal -->
   <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLongTitle">Add Slider</h5>
@@ -198,62 +210,135 @@
             </div>
 
 
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="">Language **</label>
+                        <select name="language_id" class="form-control">
+                            <option value="" selected disabled>Select a language</option>
+                            @foreach ($langs as $lang)
+                                <option value="{{$lang->id}}">{{$lang->name}}</option>
+                            @endforeach
+                        </select>
+                        <p id="errlanguage_id" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
+            </div>
 
-            <div class="form-group">
-                <label for="">Language **</label>
-                <select name="language_id" class="form-control">
-                    <option value="" selected disabled>Select a language</option>
-                    @foreach ($langs as $lang)
-                        <option value="{{$lang->id}}">{{$lang->name}}</option>
-                    @endforeach
-                </select>
-                <p id="errlanguage_id" class="mb-0 text-danger em"></p>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Title **</label>
+                      <input type="text" class="form-control" name="title" value="" placeholder="Enter Title">
+                      <p id="errtitle" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Title Font Size **</label>
+                      <input type="number" class="form-control ltr" name="title_font_size" value="" placeholder="Enter Title Font Size">
+                      <p id="errtitle_font_size" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="">Title **</label>
-              <input type="text" class="form-control" name="title" value="" placeholder="Enter Title">
-              <p id="errtitle" class="mb-0 text-danger em"></p>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                      <label>Title Color Code **</label>
+                      <input class="jscolor form-control ltr" name="title_color" value="">
+                      <p id="title_color" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label>Title Color Code **</label>
-              <input class="jscolor form-control ltr" name="title_color" value="">
-              <p id="title_color" class="mb-0 text-danger em"></p>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Text **</label>
+                      <input type="text" class="form-control" name="text" value="" placeholder="Enter Text">
+                      <p id="errtext" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="">Text Font Size **</label>
+                        <input type="number" class="form-control ltr" name="text_font_size" value="" placeholder="Enter Text Font Size">
+                        <p id="errtext_font_size" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="">Text **</label>
-              <input type="text" class="form-control" name="text" value="" placeholder="Enter Text">
-              <p id="errtext" class="mb-0 text-danger em"></p>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                      <label>Text Color Code **</label>
+                      <input class="jscolor form-control ltr" name="text_color" value="">
+                      <p id="text_color" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label>Text Color Code **</label>
-              <input class="jscolor form-control ltr" name="text_color" value="">
-              <p id="text_color" class="mb-0 text-danger em"></p>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Button 1 Text</label>
+                      <input type="text" class="form-control" name="button_text" value="" placeholder="Enter Button Text">
+                      <p id="errbutton_text" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Button 1 Text Font Size **</label>
+                      <input type="text" class="form-control ltr" name="button_text_font_size" value="" placeholder="Enter Button Text">
+                      <p id="errbutton_text_font_size" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="">Button Text 1</label>
-              <input type="text" class="form-control" name="button_text" value="" placeholder="Enter Button Text">
-              <p id="errbutton_text" class="mb-0 text-danger em"></p>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Button 1 URL</label>
+                      <input type="text" class="form-control ltr" name="button_url" value="" placeholder="Enter Button URL">
+                      <p id="errbutton_url" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Button 1 Color Code **</label>
+                        <input class="jscolor form-control ltr" name="button_color" value="">
+                        <p id="button_color" class="mb-0 text-danger em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="">Button URL 1</label>
-              <input type="text" class="form-control ltr" name="button_url" value="" placeholder="Enter Button URL">
-              <p id="errbutton_url" class="mb-0 text-danger em"></p>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Button 2 Text</label>
+                      <input type="text" class="form-control" name="button_text1"  placeholder="Enter Button Text">
+                      <p id="errbutton_text1" class="text-danger mb-0 em"></p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="">Button 2 URL</label>
+                      <input type="text" class="form-control ltr" name="button_url1"  placeholder="Enter Button URL">
+                      <p id="errbutton_url1" class="text-danger mb-0 em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="">Button Text 2</label>
-              <input type="text" class="form-control" name="button_text1"  placeholder="Enter Button Text">
-              <p id="errbutton_text1" class="text-danger mb-0 em"></p>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                      <label for="">Button 2 Text Font Size **</label>
+                      <input type="text" class="form-control ltr" name="button_text1_font_size"  placeholder="Enter Button Text">
+                      <p id="errbutton_text1_font_size" class="text-danger mb-0 em"></p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="">Button URL 2</label>
-              <input type="text" class="form-control ltr" name="button_url1"  placeholder="Enter Button URL">
-              <p id="errbutton_url1" class="text-danger mb-0 em"></p>
-            </div>
-            <div class="form-group">
-              <label>Button Color Code **</label>
-              <input class="jscolor form-control ltr" name="button_color" value="">
-              <p id="button_color" class="mb-0 text-danger em"></p>
-            </div>
+
 
             <div class="form-group">
               <label for="">Serial Number **</label>
@@ -270,4 +355,36 @@
       </div>
     </div>
   </div>
+@endsection
+
+
+@section('scripts')
+<script>
+$(function ($) {
+  "use strict";
+
+    $(".remove-image").on('click', function(e) {
+        e.preventDefault();
+        $(".request-loader").addClass("show");
+
+        let type = $(this).data('type');
+        let fd = new FormData();
+        fd.append('type', type);
+        fd.append('language_id', {{$abe->language->id}});
+
+        $.ajax({
+            url: "{{route('admin.slider.image.remove')}}",
+            data: fd,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data == "success") {
+                    window.location = "{{url()->current() . '?language=' . $abe->language->code}}";
+                }
+            }
+        })
+    });
+});
+</script>
 @endsection

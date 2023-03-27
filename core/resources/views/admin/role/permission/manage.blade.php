@@ -38,7 +38,7 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-lg-6 offset-lg-3">
+            <div class="col-lg-8 offset-lg-2">
               <form id="permissionsForm" class="" action="{{route('admin.role.permissions.update')}}" method="post">
                 {{csrf_field()}}
                 <input type="hidden" name="role_id" value="{{Request::route('id')}}">
@@ -57,72 +57,95 @@
                 			<input type="hidden" name="permissions[]" value="Dashboard" class="selectgroup-input">
                 		</label>
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Basic Settings" class="selectgroup-input" @if(is_array($permissions) && in_array('Basic Settings', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Basic Settings</span>
+                			<input type="checkbox" name="permissions[]" value="POS" class="selectgroup-input" @if(is_array($permissions) && in_array('POS', $permissions)) checked @endif>
+                			<span class="selectgroup-button">POS</span>
                 		</label>
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Subscribers" class="selectgroup-input" @if(is_array($permissions) && in_array('Subscribers', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Subscribers</span>
+                			<input type="checkbox" name="permissions[]" value="Order Management" class="selectgroup-input" @if(is_array($permissions) && in_array('Order Management', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Order Management</span>
                 		</label>
+                		<label class="selectgroup-item">
+                			<input type="checkbox" name="permissions[]" value="Customers" class="selectgroup-input" @if(is_array($permissions) && in_array('Customers', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Customers</span>
+                		</label>
+
                 		<label class="selectgroup-item">
                 			<input type="checkbox" name="permissions[]" value="Product Management" class="selectgroup-input" @if(is_array($permissions) && in_array('Product Management', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Product Management</span>
+                			<span class="selectgroup-button">Items Management</span>
+                		</label>
+
+                		<label class="selectgroup-item">
+                			<input type="checkbox" name="permissions[]" value="QR Code Builder" class="selectgroup-input" @if(is_array($permissions) && in_array('QR Code Builder', $permissions)) checked @endif>
+                			<span class="selectgroup-button">QR Code Builder</span>
                 		</label>
                 		<label class="selectgroup-item">
                 			<input type="checkbox" name="permissions[]" value="Payment Gateways" class="selectgroup-input" @if(is_array($permissions) && in_array('Payment Gateways', $permissions)) checked @endif>
                 			<span class="selectgroup-button">Payment Gateways</span>
                 		</label>
+
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Home Page" class="selectgroup-input" @if(is_array($permissions) && in_array('Home Page', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Home Page</span>
-                		</label>
+                			<input type="checkbox" name="permissions[]" value="Reservation Settings" class="selectgroup-input" @if(is_array($permissions) && in_array('Reservation Settings', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Reservation Settings</span>
+						</label>
 
                 		<label class="selectgroup-item">
                 			<input type="checkbox" name="permissions[]" value="Table Reservation" class="selectgroup-input" @if(is_array($permissions) && in_array('Table Reservation', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Table Reservation</span>
-						</label>
-						<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Footer" class="selectgroup-input" @if(is_array($permissions) && in_array('Footer', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Footer</span>
-                		</label>
-                		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Pages" class="selectgroup-input" @if(is_array($permissions) && in_array('Pages', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Pages</span>
-                		</label>
-
+                			<span class="selectgroup-button">Table Reservations</span>
+                        </label>
 
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Gallery Management" class="selectgroup-input" @if(is_array($permissions) && in_array('Gallery Management', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Gallery Management</span>
-                		</label>
+                			<input type="checkbox" name="permissions[]" value="Table Reservation" class="selectgroup-input" @if(is_array($permissions) && in_array('Table Reservation', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Tables & QR Builder</span>
+                        </label>
 
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Blogs" class="selectgroup-input" @if(is_array($permissions) && in_array('Blogs', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Blogs</span>
-                		</label>
+                			<input type="checkbox" name="permissions[]" value="Menu Builder" class="selectgroup-input" @if(is_array($permissions) && in_array('Menu Builder', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Drag & Draop Menu Builder</span>
+                        </label>
+
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Contact Page" class="selectgroup-input" @if(is_array($permissions) && in_array('Contact Page', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Contact Page</span>
-                		</label>
+                			<input type="checkbox" name="permissions[]" value="Website Pages" class="selectgroup-input" @if(is_array($permissions) && in_array('Website Pages', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Website Pages</span>
+                        </label>
+
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Role Management" class="selectgroup-input" @if(is_array($permissions) && in_array('Role Management', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Role Management</span>
-                		</label>
+                			<input type="checkbox" name="permissions[]" value="Announcement Popup" class="selectgroup-input" @if(is_array($permissions) && in_array('Announcement Popup', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Announcement Popup</span>
+                        </label>
+
                 		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Users Management" class="selectgroup-input" @if(is_array($permissions) && in_array('Users Management', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Users Management</span>
+                			<input type="checkbox" name="permissions[]" value="Push Notification" class="selectgroup-input" @if(is_array($permissions) && in_array('Push Notification', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Push Notification</span>
+                        </label>
+
+                		<label class="selectgroup-item">
+                			<input type="checkbox" name="permissions[]" value="Subscribers" class="selectgroup-input" @if(is_array($permissions) && in_array('Subscribers', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Subscribers</span>
+                        </label>
+
+                		<label class="selectgroup-item">
+                			<input type="checkbox" name="permissions[]" value="Basic Settings" class="selectgroup-input" @if(is_array($permissions) && in_array('Basic Settings', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Settings</span>
                 		</label>
+
                 		<label class="selectgroup-item">
                 			<input type="checkbox" name="permissions[]" value="Language Management" class="selectgroup-input" @if(is_array($permissions) && in_array('Language Management', $permissions)) checked @endif>
                 			<span class="selectgroup-button">Language Management</span>
                 		</label>
+
+                		<label class="selectgroup-item">
+                			<input type="checkbox" name="permissions[]" value="Admins Management" class="selectgroup-input" @if(is_array($permissions) && in_array('Admins Management', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Admins Management</span>
+                		</label>
+
+                		<label class="selectgroup-item">
+                			<input type="checkbox" name="permissions[]" value="Sitemap" class="selectgroup-input" @if(is_array($permissions) && in_array('Sitemap', $permissions)) checked @endif>
+                			<span class="selectgroup-button">Sitemap</span>
+                        </label>
+
                 		<label class="selectgroup-item">
                 			<input type="checkbox" name="permissions[]" value="Backup" class="selectgroup-input" @if(is_array($permissions) && in_array('Backup', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Backup</span>
-                		</label>
-                		<label class="selectgroup-item">
-                			<input type="checkbox" name="permissions[]" value="Users" class="selectgroup-input" @if(is_array($permissions) && in_array('Users', $permissions)) checked @endif>
-                			<span class="selectgroup-button">Users</span>
+                			<span class="selectgroup-button">Database Backup</span>
                 		</label>
                 	</div>
                 </div>

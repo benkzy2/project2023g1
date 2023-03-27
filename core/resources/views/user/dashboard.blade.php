@@ -32,7 +32,7 @@
                                     <h5>{{__('User')}}</h5>
                                     <ul class="list">
                                         <li><span>{{__('Username')}}:</span></li>
-                                        <li><span>{{__('Email')}}:</span></li>
+                                        <li><span>{{__('Email Address')}}:</span></li>
                                         <li><span>{{__('Phone')}}:</span></li>
                                         <li><span>{{__('City')}}:</span></li>
                                         <li><span>{{__('State')}}:</span></li>
@@ -68,29 +68,47 @@
                                             <thead>
                                                 <tr>
                                                     <th>{{__('Order Number')}}</th>
+                                                    <th>{{__('Type')}}</th>
+                                                    <th>{{__('Serving Method')}}</th>
                                                     <th>{{__('Date')}}</th>
                                                     <th>{{__('Total Price')}}</th>
                                                     <th>{{__('Action')}}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                    @if($orders->count() > 0)
-                                                    @foreach ($orders as $order)
-                                                    <tr>
-                                                        <td>{{$order->order_number}}</td>
-                                                        <td>{{$order->created_at->format('d-m-Y')}}</td>
-                                                        <td>{{$order->currency_symbol_position == 'left' ? $order->currency_symbol : ''}} {{$order->total}} {{$order->currency_symbol_position == 'right' ? $order->currency_symbol : ''}}</td>
-                                                        <td><a href="{{route('user-orders-details',$order->id)}}" class="btn">{{__('Details')}}</a></td>
-                                                    </tr>
-                                                    @endforeach
-                                                    @else
-                                                    <tr class="text-center">
-                                                        <td colspan="4">
-                                                            {{__('No Orders')}}
-                                                        </td>
-                                                    </tr>
-                                                    @endif
-                                                </tbody>
+                                                @if($orders)
+                                                @foreach ($orders as $order)
+                                                <tr>
+                                                    <td>{{$order->order_number}}</td>
+                                                    <td>
+                                                        @if ($order->type == 'website')
+                                                            Website
+                                                        @elseif ($order->type == 'qr')
+                                                            QR
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($order->serving_method == 'on_table')
+                                                            On Table
+                                                        @elseif ($order->serving_method == 'home_delivery')
+                                                            Home Delivery
+                                                        @elseif ($order->serving_method == 'pick_up')
+                                                            Pick up
+                                                        @endif
+                                                    </td>
+                                                     <td>{{$order->created_at->format('d-m-Y')}}</td>
+                                                     <td>{{$order->currency_symbol_position == 'left' ? $order->currency_symbol : ''}} {{$order->total}} {{$order->currency_symbol_position == 'right' ? $order->currency_symbol : ''}}</td>
+                                                    <td><a href="{{route('user-orders-details',$order->id)}}" class="btn">{{__('Details')}}</a></td>
+                                                </tr>
+                                                @endforeach
+                                                @else
+                                                <tr class="text-center">
+                                                    <td colspan="4">
+                                                        {{__('No Orders')}}
+                                                    </td>
+                                                </tr>
+                                                @endif
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>

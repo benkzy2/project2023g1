@@ -30,6 +30,12 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Home Page</a>
       </li>
       <li class="separator">
@@ -66,6 +72,20 @@
 
               <form id="ajaxForm" action="{{route('admin.specialsection.update', $lang_id)}}" method="post">
                 @csrf
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="form-group">
+                      <div class="mb-2">
+                        <label for="image"><strong> Backgroud Image </strong></label>
+                      </div>
+                      <div class="showImage mb-3">
+                        <img src="{{ !empty($abe->special_section_bg) ? asset('assets/front/img/'.$abe->special_section_bg) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
+                      </div>
+                      <input type="file" name="special_section_bg" id="image" class="form-control image">
+                      <p id="errspecial_section_bg" class="mb-0 text-danger em"></p>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-group">
                   <label for="">Title **</label>
                   <input name="special_section_title" class="form-control" value="{{$abe->special_section_title}}">

@@ -19,7 +19,6 @@ class ReviewController extends Controller
 
     public function reviewsubmit(Request $request)
     {
-
         if ($request->review || $request->comment) {
             if (ProductReview::where('user_id', Auth::user()->id)->where('product_id', $request->product_id)->exists()) {
                 $exists =    ProductReview::where('user_id', Auth::user()->id)->where('product_id', $request->product_id)->first();

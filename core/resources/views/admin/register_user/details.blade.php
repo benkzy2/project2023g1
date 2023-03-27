@@ -245,25 +245,50 @@
                          </td>
                          <td>
                             <form id="statusForm{{$order->id}}" class="d-inline-block" action="{{route('admin.product.orders.status')}}" method="post">
-                               @csrf
-                               <input type="hidden" name="order_id" value="{{$order->id}}">
-                               <select class="form-control
-                                  @if ($order->order_status == 'pending')
+                                @csrf
+                                <input type="hidden" name="order_id" value="{{$order->id}}">
+                                <select class="form-control
+                                @if ($order->order_status == 'pending')
+
+                                @elseif ($order->order_status == 'received')
+                                  bg-secondary
+                                @elseif ($order->order_status == 'preparing')
                                   bg-warning
-                                  @elseif ($order->order_status == 'processing')
+                                @elseif ($order->order_status == 'ready_to_pick_up')
                                   bg-primary
-                                  @elseif ($order->order_status == 'completed')
+                                @elseif ($order->order_status == 'picked_up')
+                                  bg-info
+                                @elseif ($order->order_status == 'delivered')
                                   bg-success
-                                  @elseif ($order->order_status == 'reject')
+                                @elseif ($order->order_status == 'cancelled')
                                   bg-danger
+                                @elseif ($order->order_status == 'ready_to_serve')
+                                  bg-white text-dark
+                                @elseif ($order->order_status == 'served')
+                                  bg-light text-dark
+                                @endif
+                                " name="order_status" onchange="document.getElementById('statusForm{{$order->id}}').submit();">
+                                  <option value="pending" {{$order->order_status == 'pending' ? 'selected' : ''}}>Pending</option>
+                                  <option value="received" {{$order->order_status == 'received' ? 'selected' : ''}}>Received</option>
+                                  <option value="preparing" {{$order->order_status == 'preparing' ? 'selected' : ''}}>Preparing</option>
+
+                                  @if ($order->serving_method != 'on_table')
+                                  <option value="ready_to_pick_up" {{$order->order_status == 'ready_to_pick_up' ? 'selected' : ''}}>Ready to pick up</option>
+                                  <option value="picked_up" {{$order->order_status == 'picked_up' ? 'selected' : ''}}>Picked up</option>
                                   @endif
-                                  " name="order_status" onchange="document.getElementById('statusForm{{$order->id}}').submit();">
-                               <option value="pending" {{$order->order_status == 'pending' ? 'selected' : ''}}>Pending</option>
-                               <option value="processing" {{$order->order_status == 'processing' ? 'selected' : ''}}>Processing</option>
-                               <option value="completed" {{$order->order_status == 'completed' ? 'selected' : ''}}>Completed</option>
-                               <option value="reject" {{$order->order_status == 'reject' ? 'selected' : ''}}>Rejected</option>
-                               </select>
-                            </form>
+
+                                  @if ($order->serving_method == 'home_delivery')
+                                  <option value="delivered" {{$order->order_status == 'delivered' ? 'selected' : ''}}>Delivered</option>
+                                  @endif
+
+                                  @if ($order->serving_method == 'on_table')
+                                  <option value="ready_to_serve" {{$order->order_status == 'ready_to_serve' ? 'selected' : ''}}>Ready to Serve</option>
+                                  <option value="served" {{$order->order_status == 'served' ? 'selected' : ''}}>Served</option>
+                                  @endif
+
+                                  <option value="cancelled" {{$order->order_status == 'cancelled' ? 'selected' : ''}}>Cancelled</option>
+                                </select>
+                              </form>
                          </td>
                          <td>
                             <a href="{{route('admin.product.details',$order->id)}}" class="btn btn-primary btn-sm editbtn"><i class="fas fa-eye"></i> View</a>

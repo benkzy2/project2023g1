@@ -12,13 +12,13 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Roles Management</a>
+        <a href="#">Admins Management</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Roles</a>
+        <a href="#">Roles Management</a>
       </li>
     </ul>
   </div>

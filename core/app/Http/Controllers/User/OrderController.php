@@ -16,13 +16,19 @@ class OrderController extends Controller
     }
     public function index()
     {
-        $orders = ProductOrder::where('user_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $orders = ProductOrder::where('user_id',Auth::user()->id)->orderBy('id', 'DESC')->paginate(10);
         return view('user.order',compact('orders'));
     }
 
     public function orderdetails($id)
     {
         $data = ProductOrder::findOrFail($id);
+        // if the order has no user_id (guest checkout), then no check
+        if (!empty($data->user_id)) {
+            if (Auth::check() && Auth::user()->id != $data->user_id) {
+                return back();
+            }
+        }
         return view('user.order_details',compact('data'));
     }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
     <!--====== PAGE TITLE PART START ======-->
-    <section class="page-title-area d-flex align-items-center" style="background-image:url('{{asset('assets/front/img/'.$bs->breadcrumb)}}')">
+    <section class="page-title-area d-flex align-items-center lazy" data-bg="{{asset('assets/front/img/'.$bs->breadcrumb)}}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -141,7 +141,7 @@
                                 </div>
                                 @endif
                                 <a class="pricing-thumb" href="{{route('front.product.details',[$product->slug,$product->id])}}">
-                                    <img src="{{asset('assets/front/img/product/featured/'.$product->feature_image)}}" alt="">
+                                    <img class="lazy wow fadeIn" data-src="{{asset('assets/front/img/product/featured/'.$product->feature_image)}}" alt="" data-wow-delay=".5s">
                                 </a>
                                 <h3 class="title">{{$be->base_currency_symbol_position == 'left' ? $be->base_currency_symbol : ''}}{{convertUtf8($product->current_price)}}{{$be->base_currency_symbol_position == 'right' ? $be->base_currency_symbol : ''}}
 
@@ -154,7 +154,7 @@
                                 </h3>
                                 <a href="{{route('front.product.details',[$product->slug,$product->id])}}"><span>{{convertUtf8($product->title)}}</span></a>
                                 <p> {{convertUtf8(strlen($product->summary)) > 48 ? convertUtf8(substr($product->summary, 0, 48)) . '...' : convertUtf8($product->summary)}}</p>
-                                <a class="main-btn cart-link" data-href="{{route('add.cart',$product->id)}}">{{__('Add To Cart')}}</a>
+                                <a class="main-btn cart-link" data-product="{{$product}}" data-href="{{route('add.cart',$product->id)}}">{{__('Add To Cart')}}</a>
                             </div>
                         </div>
                         @endforeach
@@ -192,10 +192,12 @@
 
     <!--====== PRICING PART ENDS ======-->
 
-    <!--====== SHOP BAR PART START ======-->
+    <!--====== SHOP BAR PART END ======-->
 
 
-
+    {{-- Variation Modal Starts --}}
+    @includeIf('front.partials.variation-modal')
+    {{-- Variation Modal Ends --}}
 @endsection
 
 

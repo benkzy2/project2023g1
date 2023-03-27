@@ -22,7 +22,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
 
 @section('content')
   <div class="page-header">
-    <h4 class="page-title">Product Categories</h4>
+    <h4 class="page-title">Item Categories</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="{{route('admin.dashboard')}}">
@@ -33,7 +33,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Product Page</a>
+        <a href="#">Items Management</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
@@ -105,7 +105,22 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                               <h2 class="d-inline-block"><span class="badge badge-danger">Deactive</span></h2>
                             @endif
                           </td>
-                          <td><input type="checkbox" class="featPcat" class="form-control" name="is_feature" data="{{$category->id}}" {{$category->is_feature == 1 ? 'checked' : ''}} value="1"></td>
+                          <td>
+                              <form id="featureForm{{$category->id}}" action="{{route('admin.pcategory.feature')}}" method="POST">
+                                  @csrf
+                                  <input type="hidden" name="pcategory_id" value="{{$category->id}}">
+                                  <select name="feature" id="" class="form-control-sm text-white
+                                    @if($category->is_feature == 1)
+                                    bg-success
+                                    @elseif ($category->is_feature == 0)
+                                    bg-danger
+                                    @endif
+                                  " onchange="document.getElementById('featureForm{{$category->id}}').submit();">
+                                      <option value="1" {{$category->is_feature == 1 ? 'selected' : ''}}>Yes</option>
+                                      <option value="0" {{$category->is_feature == 0 ? 'selected' : ''}}>No</option>
+                                  </select>
+                              </form>
+                          </td>
                           <td>
                             <a class="btn btn-secondary btn-sm editbtn" href="{{route('admin.category.edit', $category->id) . '?language=' . request()->input('language')}}">
                               <span class="btn-label">
@@ -186,6 +201,11 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
               <label for="">Name **</label>
               <input type="text" class="form-control" name="name" value="" placeholder="Enter name">
               <p id="errname" class="mb-0 text-danger em"></p>
+            </div>
+            <div class="form-group">
+              <label for="">Tax</label>
+              <input type="text" class="form-control" name="tax" value="" placeholder="Enter tax in %" autocomplete="off">
+              <p id="errtax" class="mb-0 text-danger em"></p>
             </div>
 
             <div class="form-group">

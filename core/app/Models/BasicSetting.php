@@ -9,7 +9,7 @@ class BasicSetting extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        "language_id", 
+        "language_id",
         'intro_section_title',
         'intro_title',
         'intro_text',
@@ -36,8 +36,7 @@ class BasicSetting extends Model
         'copyright_text',
         'footer_logo',
         'reservation_title',
-        'menu_page1',
-        
+
        ];
 
     public function language() {

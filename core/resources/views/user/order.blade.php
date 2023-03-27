@@ -21,7 +21,7 @@
 
 
 <!--====== CHECKOUT PART START ======-->
-<section class="user-dashbord">
+<section class="user-dashbord content mt-5">
     <div class="container">
         <div class="row">
             @include('user.inc.site_bar')
@@ -35,11 +35,13 @@
                                 </div>
                                 <div class="main-info">
                                     <div class="main-table">
-                                    <div class="table-responsiv">
+                                    <div class="table-responsive">
                                         <table id="example" class="dataTables_wrapper dt-responsive table-striped dt-bootstrap4 w-100">
                                             <thead>
                                                 <tr>
                                                     <th>{{__('Order Number')}}</th>
+                                                    <th>{{__('Type')}}</th>
+                                                    <th>{{__('Serving Method')}}</th>
                                                     <th>{{__('Date')}}</th>
                                                     <th>{{__('Total Price')}}</th>
                                                     <th>{{__('Action')}}</th>
@@ -49,7 +51,23 @@
                                                 @if($orders)
                                                 @foreach ($orders as $order)
                                                 <tr>
-                                                <td>{{$order->order_number}}</td>
+                                                    <td>{{$order->order_number}}</td>
+                                                    <td>
+                                                        @if ($order->type == 'website')
+                                                            Website
+                                                        @elseif ($order->type == 'qr')
+                                                            QR
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($order->serving_method == 'on_table')
+                                                            On Table
+                                                        @elseif ($order->serving_method == 'home_delivery')
+                                                            Home Delivery
+                                                        @elseif ($order->serving_method == 'pick_up')
+                                                            Pick up
+                                                        @endif
+                                                    </td>
                                                      <td>{{$order->created_at->format('d-m-Y')}}</td>
                                                      <td>{{$order->currency_symbol_position == 'left' ? $order->currency_symbol : ''}} {{$order->total}} {{$order->currency_symbol_position == 'right' ? $order->currency_symbol : ''}}</td>
                                                     <td><a href="{{route('user-orders-details',$order->id)}}" class="btn">{{__('Details')}}</a></td>
@@ -66,6 +84,9 @@
                                         </table>
                                     </div>
                                 </div>
+                                    <div>
+                                        {{$orders->links()}}
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -13,7 +13,7 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Profile Setting</a>
+        <a href="#">Profile Settings</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>

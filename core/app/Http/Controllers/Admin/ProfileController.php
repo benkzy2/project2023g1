@@ -24,7 +24,6 @@ class ProfileController extends Controller
 
     public function updateProfile(Request $request) {
       $img = $request->file('profile_image');
-
       $allowedExts = array('jpg', 'png', 'jpeg');
       $admin = Admin::findOrFail(Auth::guard('admin')->user()->id);
 

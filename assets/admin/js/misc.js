@@ -125,17 +125,6 @@
 
     });
 
-    // footer bottom image preview
-    $("#footer_bottom_img").on('change', function () {
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('.footer_bottom_img img').attr('src', e.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    });
-
     // intro section video background preview
     $(document).on('change', '#intro_video_image', function () {
         var file = event.target.files[0];
@@ -147,17 +136,6 @@
         reader.readAsDataURL(file);
     });
 
-    // intro section signature preview
-    $(document).on('change', '#intro_signature', function () {
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('.intro_signature img').attr('src', e.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    });
-
     // slider background image preview
     $(document).on('change', '#bg_image', function () {
         var file = event.target.files[0];
@@ -175,28 +153,6 @@
         var reader = new FileReader();
         reader.onload = function (e) {
             $('.bg_image img').attr('src', e.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    });
-
-    // slider shape image preview
-    $(document).on('change', '#slider_shape_img', function () {
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('.slider_shape_img img').attr('src', e.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    });
-
-    // slider bottom image preview
-    $(document).on('change', '#slider_bottom_img', function () {
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('.slider_bottom_img img').attr('src', e.target.result);
         };
 
         reader.readAsDataURL(file);
@@ -325,55 +281,4 @@
         document.getElementById('socialForm').submit();
     });
 
-    $('.chackFeature').on('click', function () {
-        let featureId = $(this).attr('data');
-        if ($(this).is(':checked')) {
-            $.get(mainurl + '/admin/product/feature/check/' + featureId + ',1', function (response) {
-                if (response == "done") {
-                    location.reload();
-                }
-            })
-        } else {
-            $.get(mainurl + '/admin/product/feature/check/' + featureId + ',0', function (response) {
-                if (response == "done") {
-                    location.reload();
-                }
-            })
-        }
-    });
-
-    $('.chackSpecial').on('click', function () {
-        let specialId = $(this).attr('data');
-        if ($(this).is(':checked')) {
-            $.get(mainurl + '/admin/product/special/check/' + specialId + ',1', function (response) {
-                if (response == "done") {
-                    location.reload();
-                }
-            })
-        } else {
-            $.get(mainurl + '/admin/product/special/check/' + specialId + ',0', function (response) {
-                if (response == "done") {
-                    location.reload();
-                }
-            })
-        }
-    });
-
-
-    $('.featPcat').on('click',function(){
-        let featureId = $(this).attr('data');
-        if($(this).is(':checked')){
-            $.get(mainurl+'/admin/pcategory/feature/check/'+featureId+',1',function (response) {
-                if (response == "done") {
-                    location.reload();
-                }
-            });
-        } else {
-            $.get(mainurl+'/admin/pcategory/feature/check/'+featureId+',0',function (response) {
-                if (response == "done") {
-                    location.reload();
-                }
-            });
-        }
-    });
 })(jQuery); 

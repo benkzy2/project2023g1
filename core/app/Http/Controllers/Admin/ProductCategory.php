@@ -33,6 +33,7 @@ class ProductCategory extends Controller
             'language_id' => 'required',
             'name' => 'required|max:255',
             'status' => 'required',
+            'tax' => 'nullable|numeric',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -55,6 +56,7 @@ class ProductCategory extends Controller
         }
 
         $input['slug'] =  make_slug($request->name);
+        $input['tax'] =  empty($request->tax) ? 0.00 : $request->tax;
         $data->create($input);
 
         Session::flash('success', 'Category added successfully!');
@@ -72,6 +74,7 @@ class ProductCategory extends Controller
     {
         $rules = [
             'name' => 'required|max:255',
+            'tax' => 'nullable|numeric',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -90,6 +93,7 @@ class ProductCategory extends Controller
           }
 
         $input['slug'] =  make_slug($request->name);
+        $input['tax'] =  empty($request->tax) ? 0.00 : $request->tax;
         $data->update($input);
 
         Session::flash('success', 'Category Update successfully!');
@@ -132,19 +136,33 @@ class ProductCategory extends Controller
         return "success";
     }
 
-    public function FeatureCheck($data)
+    public function FeatureCheck(Request $request)
     {
-        $info = explode(',',$data);
-        $id = $info[0];
-        $value = $info[1];
+        $id = $request->pcategory_id;
+        $value = $request->feature;
 
-
-        Pcategory::where('id',$id)->update([
-        'is_feature' => $value
-        ]);
+        $pcategory = Pcategory::findOrFail($id);
+        $pcategory->is_feature = $value;
+        $pcategory->save();
 
         Session::flash('success', 'Product category updated successfully!');
-        return 'done';
+        return back();
+    }
+
+    public function removeImage(Request $request) {
+        $type = $request->type;
+        $pcatid = $request->pcategory_id;
+
+        $pcategory = Pcategory::findOrFail($pcatid);
+
+        if ($type == "pcategory") {
+            @unlink("assets/front/img/category/" . $pcategory->image);
+            $pcategory->image = NULL;
+            $pcategory->save();
+        }
+
+        $request->session()->flash('success', 'Image removed successfully!');
+        return "success";
     }
 
 }

@@ -19,7 +19,7 @@
 
 @section('content')
   <div class="page-header">
-    <h4 class="page-title">Table Section</h4>
+    <h4 class="page-title">Text & Image</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="{{route('admin.dashboard')}}">
@@ -30,13 +30,13 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Home Page</a>
+        <a href="#">Reservation Settings</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Table Section</a>
+        <a href="#">Text & Image</a>
       </li>
     </ul>
   </div>
@@ -46,7 +46,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-lg-10">
-                    <div class="card-title">Update Table Section</div>
+                    <div class="card-title">Update Text & Image</div>
                 </div>
                 <div class="col-lg-2">
                     @if (!empty($langs))
@@ -69,19 +69,17 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="form-group">
-                      <div class="col-12 mb-2">
+                      <div class="mb-2">
                         <label for="image"><strong> Backgroud Image </strong></label>
                       </div>
-                      <div class="col-md-12 showImage mb-3">
-                        <img src="{{ $abe->table_section_img ? asset('assets/front/img/'.$abe->table_section_img) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
+                      <div class="showImage mb-3">
+                        @if (!empty($abe->table_section_img))
+                          <a class="remove-image" data-type="table_background"><i class="far fa-times-circle"></i></a>
+                        @endif
+                        <img src="{{ !empty($abe->table_section_img) ? asset('assets/front/img/'.$abe->table_section_img) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
                       </div>
                       <input type="file" name="table_section_img" id="image" class="form-control image">
                       <p id="errtable_section_img" class="mb-0 text-danger em"></p>
-                      <div class="progress mt-3 d-none">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        <small class="show-name mt-1">{{__('Upload only ZIP Files, Max File Size is 5 MB')}}</small>
-                        <p class="text-danger mb-2 file-error d-none"></p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -114,4 +112,35 @@
     </div>
   </div>
 
+@endsection
+
+@section('scripts')
+<script>
+$(function ($) {
+  "use strict";
+
+    $(".remove-image").on('click', function(e) {
+        e.preventDefault();
+        $(".request-loader").addClass("show");
+
+        let type = $(this).data('type');
+        let fd = new FormData();
+        fd.append('type', type);
+        fd.append('language_id', {{$abe->language->id}});
+
+        $.ajax({
+            url: "{{route('admin.tablesection.rmv.img')}}",
+            data: fd,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data == "success") {
+                    window.location = "{{url()->current() . '?language=' . $abe->language->code}}";
+                }
+            }
+        })
+    });
+});
+</script>
 @endsection

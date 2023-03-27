@@ -34,7 +34,13 @@ class ProductOrder extends Model
         "txnid",
         "charge_id",
         "order_status",
-        'invoice_number'
+        'invoice_number',
+        'order_notes',
+        'tax',
+        'coupon',
+        'delivery_date',
+        'delivery_time_start',
+        'delivery_time_end',
        ];
 
 

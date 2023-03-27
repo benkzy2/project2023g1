@@ -1,24 +1,8 @@
 @extends('admin.layout')
 
-@if(!empty($abe->language) && $abe->language->rtl == 1)
-@section('styles')
-<style>
-    form input,
-    form textarea,
-    form select {
-        direction: rtl;
-    }
-    form .note-editor.note-frame .note-editing-area .note-editable {
-        direction: rtl;
-        text-align: right;
-    }
-</style>
-@endsection
-@endif
-
 @section('content')
   <div class="page-header">
-    <h4 class="page-title">Basic Informations</h4>
+    <h4 class="page-title">General Settings</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="{{route('admin.dashboard')}}">
@@ -29,13 +13,13 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Basic Settings</a>
+        <a href="#">Settings</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Basic Informations</a>
+        <a href="#">General Settings</a>
       </li>
     </ul>
   </div>
@@ -46,18 +30,8 @@
           @csrf
           <div class="card-header">
               <div class="row">
-                  <div class="col-lg-10">
-                      <div class="card-title">Update Basic Informations</div>
-                  </div>
-                  <div class="col-lg-2">
-                      @if (!empty($langs))
-                          <select name="language" class="form-control" onchange="window.location='{{url()->current() . '?language='}}'+this.value">
-                              <option value="" selected disabled>Select a Language</option>
-                              @foreach ($langs as $lang)
-                                  <option value="{{$lang->code}}" {{$lang->code == request()->input('language') ? 'selected' : ''}}>{{$lang->name}}</option>
-                              @endforeach
-                          </select>
-                      @endif
+                  <div class="col-lg-12">
+                      <div class="card-title">Update General Settings</div>
                   </div>
               </div>
           </div>
@@ -66,6 +40,9 @@
               <div class="col-lg-6 offset-lg-3">
                 @csrf
                 <div class="form-group">
+                  <h3 class="text-warning">Information</h3>
+                  <hr style="border-top: 1px solid #ffffff1a;"><br>
+
                   <label>Website Title **</label>
                   <input class="form-control" name="website_title" value="{{$abs->website_title}}">
                   @if ($errors->has('website_title'))
@@ -82,16 +59,51 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="">Timezone</label>
+                    <select class="form-control select2" name="timezone">
+                        <option value="" selected disabled>Select a Timezone</option>
+                        @foreach ($timezones as $timezone)
+                        <option value="{{$timezone->timezone}}" {{$be->timezone == $timezone->timezone ? 'selected' : ''}}>{{$timezone->timezone}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                  <br>
+                  <h3 class="text-warning">Website Appearance</h3>
+                  <hr style="border-top: 1px solid #ffffff1a;"><br>
+
                   <label>Base Color Code **</label>
                   <input class="jscolor form-control ltr" name="base_color" value="{{$abs->base_color}}">
                   @if ($errors->has('base_color'))
                     <p class="mb-0 text-danger">{{$errors->first('base_color')}}</p>
                   @endif
+
+                </div>
+
+                <div class="form-group">
+                    <label>Home Version **</label>
+                    <select name="home_version" class="form-control">
+                        <option value="static" {{$abs->home_version == 'static' ? 'selected' : ''}}>Static Version</option>
+                        <option value="slider" {{$abs->home_version == 'slider' ? 'selected' : ''}}>Slider Version</option>
+                        <option value="video" {{$abs->home_version == 'video' ? 'selected' : ''}}>Video Version</option>
+                        <option value="particles" {{$abs->home_version == 'particles' ? 'selected' : ''}}>Particles Version</option>
+                        <option value="water" {{$abs->home_version == 'water' ? 'selected' : ''}}>Water Version</option>
+                        <option value="parallax" {{$abs->home_version == 'parallax' ? 'selected' : ''}}>Parallax Version</option>
+                    </select>
                 </div>
 
                 <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <br>
+                            <h3 class="text-warning">Currency Settings</h3>
+                            <hr style="border-top: 1px solid #ffffff1a;">
+                        </div>
+                    </div>
                     <div class="col-lg-6">
                         <div class="form-group">
+
                             <label>Base Currency Symbol **</label>
                             <input type="text" class="form-control ltr" name="base_currency_symbol" value="{{$abe->base_currency_symbol}}">
                             @if ($errors->has('base_currency_symbol'))

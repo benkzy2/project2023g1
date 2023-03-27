@@ -13,13 +13,13 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Reservations Management</a>
+        <a href="#">Reservations Settings</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Reservations Page Visibility</a>
+        <a href="#">Visibility</a>
       </li>
     </ul>
   </div>

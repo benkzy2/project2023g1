@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sitemap extends Model
 {
-    protected $fillable = ['sitemap_url','filename','auto_update'];
+    protected $fillable = ['sitemap_url','filename'];
     protected $table    = 'sitemaps';
-
-    public $timestamps  = false;
 
 }

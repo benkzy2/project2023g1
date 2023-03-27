@@ -29,7 +29,13 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Gallery Page</a>
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Gallery</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
@@ -43,7 +49,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <div class="card-title d-inline-block">Edit Gallery</div>
+          <div class="card-title d-inline-block">Edit Gallery Image</div>
           <a class="btn btn-info btn-sm float-right d-inline-block" href="{{route('admin.gallery.index') . '?language=' . request()->input('language')}}">
             <span class="btn-label">
               <i class="fas fa-backward"></i>

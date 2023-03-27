@@ -17,7 +17,7 @@ class GalleryController extends Controller
         $lang = Language::where('code', $request->language)->first();
 
         $lang_id = $lang->id;
-        $data['galleries'] = Gallery::where('language_id', $lang_id)->orderBy('id', 'DESC')->paginate(10);
+        $data['galleries'] = Gallery::where('language_id', $lang_id)->orderBy('id', 'DESC')->get();
 
         $data['lang_id'] = $lang_id;
 
@@ -30,12 +30,12 @@ class GalleryController extends Controller
         return view('admin.gallery.edit', $data);
     }
 
-    
+
 
     public function store(Request $request)
     {
 
-       
+
         $img = $request->file('image');
         $allowedExts = array('jpg', 'png', 'jpeg');
 

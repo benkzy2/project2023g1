@@ -29,6 +29,12 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Home Page</a>
       </li>
       <li class="separator">
@@ -46,11 +52,11 @@
           <div class="card-header">
             <div class="card-title d-inline-block">Edit Feature</div>
             <a class="btn btn-info btn-sm float-right d-inline-block" href="{{route('admin.feature.index') . '?language=' . request()->input('language')}}">
-							<span class="btn-label">
-								<i class="fas fa-backward"></i>
-							</span>
-							Back
-						</a>
+                <span class="btn-label">
+                    <i class="fas fa-backward"></i>
+                </span>
+                Back
+            </a>
           </div>
           <div class="card-body pt-5 pb-5">
             <div class="row">
@@ -60,13 +66,16 @@
                   <div class="row">
                     <div class="col-lg-12">
                       <div class="form-group">
-                        <div class="col-12 mb-2">
+                        <div class="mb-2">
                           <label for="image"><strong> Feature Image</strong></label>
                         </div>
-                        <div class="col-md-12 showImage mb-3">
-                          <img src="{{ $feature->image ? asset('assets/front/img/features/'.$feature->image) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
+                        <div class="showImage mb-3">
+                          @if (!empty($feature->image))
+                            <a class="remove-image" data-type="feature"><i class="far fa-times-circle"></i></a>
+                          @endif
+                          <img src="{{ !empty($feature->image) ? asset('assets/front/img/features/'.$feature->image) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
                         </div>
-                        <input type="file" name="image" id="image" class="form-control image">
+                        <input type="file" name="image" class="form-control image">
                         <p id="errimage" class="mb-0 text-danger em"></p>
                         <div class="progress mt-3 d-none">
                           <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -110,3 +119,33 @@
 
 @endsection
 
+@section('scripts')
+<script>
+$(function ($) {
+  "use strict";
+
+    $(".remove-image").on('click', function(e) {
+        e.preventDefault();
+        $(".request-loader").addClass("show");
+
+        let type = $(this).data('type');
+        let fd = new FormData();
+        fd.append('type', type);
+        fd.append('feature_id', {{$feature->id}});
+
+        $.ajax({
+            url: "{{route('admin.feature.rmv.img')}}",
+            data: fd,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data == "success") {
+                    window.location = "{{url()->current() . '?language=' . $feature->language->code}}";
+                }
+            }
+        })
+    });
+});
+</script>
+@endsection

@@ -16,8 +16,12 @@ use Mail;
 
 class SubscriberController extends Controller
 {
-    public function index() {
-      $data['subscs'] = Subscriber::orderBy('id', 'DESC')->get();
+    public function index(Request $request) {
+      $term = $request->term;
+      $data['subscs'] = Subscriber::when($term, function ($query, $term) {
+                            return $query->where('email', 'LIKE', '%' . $term . '%');
+                        })->orderBy('id', 'DESC')->paginate(10);
+
       return view('admin.subscribers.index', $data);
     }
 
@@ -53,6 +57,13 @@ class SubscriberController extends Controller
                 $mail->Password   = $be->smtp_password;                               // SMTP password
                 $mail->SMTPSecure = $be->encryption;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
                 $mail->Port       = $be->smtp_port;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+                $mail->SMTPOptions = array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                );
 
                 //Recipients
                 $mail->setFrom($be->from_mail, $be->from_name);
@@ -83,5 +94,29 @@ class SubscriberController extends Controller
 
       Session::flash('success', 'Mail sent successfully!');
       return back();
+    }
+
+
+    public function delete(Request $request)
+    {
+
+        $subscriber = Subscriber::findOrFail($request->subscriber_id);
+        $subscriber->delete();
+
+        Session::flash('success', 'Subscriber deleted successfully!');
+        return back();
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+
+        foreach ($ids as $id) {
+            $subscriber = Subscriber::findOrFail($id);
+            $subscriber->delete();
+        }
+
+        Session::flash('success', 'Subscribers deleted successfully!');
+        return "success";
     }
 }

@@ -21,11 +21,11 @@
         @endif
         <form class="login-form" action="{{route('admin.auth')}}" method="POST">
           @csrf
-          <input type="text" name="username" placeholder="username"/>
+          <input type="text" name="username" placeholder="username" value="{{old('username')}}"/>
           @if ($errors->has('username'))
             <p class="text-danger text-left">{{$errors->first('username')}}</p>
           @endif
-          <input type="password" name="password" placeholder="password"/>
+          <input type="password" name="password" placeholder="password" value=""/>
           @if ($errors->has('password'))
             <p class="text-danger text-left">{{$errors->first('password')}}</p>
           @endif
@@ -33,11 +33,11 @@
         </form>
         <a class="forget-link" href="{{route('admin.forget.form')}}">Forgot Password / Username ?</a>
       </div>
+
     </div>
 
-
     <!-- jquery js -->
-    <script src="{{asset('assets/front/js/jquery-3.3.1.min.js')}}"></script>
+    <script src="{{asset('assets/front/js/vendor/jquery.3.2.1.min.js')}}"></script>
     <!-- popper js -->
     <script src="{{asset('assets/front/js/popper.min.js')}}"></script>
     <!-- bootstrap js -->

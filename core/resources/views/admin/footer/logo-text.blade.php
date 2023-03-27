@@ -33,6 +33,12 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Footer</a>
       </li>
       <li class="separator">
@@ -72,11 +78,11 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="form-group">
-                      <div class="col-12 mb-2">
+                      <div class="mb-2">
                         <label for="image"><strong>Logo</strong></label>
                       </div>
-                      <div class="col-md-12 showImage mb-3">
-                        <img src="{{ $abs->footer_logo ? asset('assets/front/img/' . $abs->footer_logo) :  asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
+                      <div class="showImage mb-3">
+                        <img src="{{ !empty($abs->footer_logo) ? asset('assets/front/img/' . $abs->footer_logo) :  asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
                       </div>
                       <input type="file" name="file" id="image" class="form-control image">
                       <p id="errimage" class="mb-0 text-danger em"></p>
@@ -86,13 +92,16 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="form-group">
-                      <div class="col-12 mb-2">
+                      <div class="mb-2">
                         <label for="footer_bottom_img"><strong>Bottom Image</strong></label>
                       </div>
-                      <div class="col-md-12 footer_bottom_img mb-3">
+                      <div class="showImage mb-3">
+                        @if (!empty($abe->footer_bottom_img))
+                          <a class="remove-image" data-type="bottom"><i class="far fa-times-circle"></i></a>
+                        @endif
                         <img src="{{ $abe->footer_bottom_img ? asset('assets/front/img/' . $abe->footer_bottom_img) :  asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
                       </div>
-                      <input type="file" name="footer_bottom_img" id="footer_bottom_img" class="form-control image">
+                      <input type="file" name="footer_bottom_img" class="form-control image">
                       <p id="errfooter_bottom_img" class="mb-0 text-danger em"></p>
                     </div>
                   </div>
@@ -127,4 +136,36 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
     </div>
   </div>
 
+@endsection
+
+
+@section('scripts')
+<script>
+$(function ($) {
+  "use strict";
+
+    $(".remove-image").on('click', function(e) {
+        e.preventDefault();
+        $(".request-loader").addClass("show");
+
+        let type = $(this).data('type');
+        let fd = new FormData();
+        fd.append('type', type);
+        fd.append('language_id', {{$abs->language->id}});
+
+        $.ajax({
+            url: "{{route('admin.footer.rmvimg')}}",
+            data: fd,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data == "success") {
+                    window.location = "{{url()->current() . '?language=' . $abs->language->code}}";
+                }
+            }
+        })
+    });
+});
+</script>
 @endsection

@@ -63,7 +63,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="form-button">
-                                                    <button class="btn form-btn">Submit</button>
+                                                    <button class="btn form-btn">{{__('Submit')}}</button>
                                                 </div>
                                             </div>
                                         </div>

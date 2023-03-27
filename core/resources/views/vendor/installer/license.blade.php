@@ -24,15 +24,51 @@
                 </div>
             @endif
 
+            <div class="alert alert-warning">
+                <p class="mrb-0">If your internet connection is off, then please turn it on first</p>
+            </div>
+
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
             <div>
-            
+                <div class="form-group {{ $errors->has('email') ? ' has-error ' : '' }}">
+                    <label for="email">
+                        Email Address
+                    </label>
+                    <input type="text" name="email" id="email" value="" placeholder="Your Mail Address" />
+                    <p>This Mail Address will be used to inform you about Urgent Notices, Announcements, Offers / Sales etc...</p>
+                    @if ($errors->has('email'))
+                        <span class="error-block">
+                            <i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $errors->first('email') }}
+                        </span>
+                    @endif
+                </div>
 
-                <div class="buttons">
-                    <a class="button btn-danger" href="https://bom.to/C4f2wslVqfaZPU" target="_bank" style="background:red;">
-                        <i class="fa fa-youtube" aria-hidden="true"></i> Subcribe to our Youtube Channel
-                    </a>
+                <div class="form-group {{ $errors->has('username') ? ' has-error ' : '' }}">
+                    <label for="username">
+                        Envato Username
+                    </label>
+                    <input type="text" name="username" id="username" value="" placeholder="Username of Your Envato Account" />
+                    @if ($errors->has('username'))
+                        <span class="error-block">
+                            <i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $errors->first('username') }}
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group {{ $errors->has('purchase_code') ? ' has-error ' : '' }}">
+                    <label for="purchase_code">
+                        Purchase Code
+                    </label>
+                    <input type="text" name="purchase_code" id="purchase_code" value="" placeholder="Your Item Purchase Code" />
+                    @if ($errors->has('purchase_code'))
+                        <span class="error-block">
+                            <i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
+                            {{ $errors->first('purchase_code') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="buttons">

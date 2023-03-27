@@ -133,33 +133,4 @@ class PageController extends Controller
         Session::flash('success', 'Pages deleted successfully!');
         return "success";
     }
-
-   public function parentLink(Request $request)
-   {
-        $lang = Language::where('code', $request->language)->first();
-        $lang_id = $lang->id;
-        $data['lang_id'] = $lang_id;
-        $data['abs'] = $lang->basic_setting;
-        return view('admin.page.paren_link',$data);
-   }
-
-   public function parentLinkUpdate(Request $request)
-   {
-    $rules = [
-        'language_id' => 'required',
-        'link' => 'required|max:30',
-    ];
-
-    $validator = Validator::make($request->all(), $rules);
-    if ($validator->fails()) {
-        $errmsgs = $validator->getMessageBag()->add('error', 'true');
-        return response()->json($validator->errors());
-    }
-
-        $bs = BS::where('language_id',$request->language_id)->first();
-        $bs->pages_p_link = $request->link;
-        $bs->save();
-        Session::flash('success','Pages parent link update successfully.');
-        return 'success';
-   }
 }

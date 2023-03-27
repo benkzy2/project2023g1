@@ -7,10 +7,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title-item text-center">
-                    <h2 class="title">{{__('My Profile')}}</h2>
+                    <h2 class="title">{{__('Edit Profile')}}</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item active" aria-current="page">{{__('My Profile')}}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{__('Edit Profile')}}</li>
                         </ol>
                     </nav>
                 </div>
@@ -36,9 +36,15 @@
                                         <form action="{{route('user-profile-update')}}" method="POST" enctype="multipart/form-data" >
                                             @csrf
                                             <div class="upload-img">
-                                                <div class="img-box">
-                                                    <img class="showimage" src="{{$user->photo ? asset('assets/front/img/user/'.$user->photo) : asset('assets/front/img/user/profile.jpg')}}" alt="user-image">
-                                                </div>
+                                                @if (strpos($user->photo, 'facebook') !== false || strpos($user->photo, 'google'))
+                                                    <div class="img-box">
+                                                        <img class="showimage" src="{{$user->photo ? $user->photo : asset('assets/front/img/user/profile.jpg')}}" alt="user-image">
+                                                    </div>
+                                                @else
+                                                    <div class="img-box">
+                                                        <img class="showimage" src="{{$user->photo ? asset('assets/front/img/user/'.$user->photo) : asset('assets/front/img/user/profile.jpg')}}" alt="user-image">
+                                                    </div>
+                                                @endif
                                                 <div class="file-upload-area">
                                                     <div class="upload-file">
                                                         <input type="file" name="photo" class="upload image">

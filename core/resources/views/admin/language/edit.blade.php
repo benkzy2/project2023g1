@@ -19,7 +19,13 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Edit Language</a>
+        <a href="#">{{$language->name}}</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Edit</a>
       </li>
     </ul>
   </div>

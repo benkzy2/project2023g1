@@ -1,0 +1,89 @@
+body {
+    direction: rtl;
+}
+.qr-menu ul#pills-tab {
+    padding-right: 0;
+}
+.food-menu-area.food-menu-3-area .food-menu-items .single-menu-item {
+    text-align: right;
+}
+.flag.flag-2 span {
+    font-size: 17px;
+    margin-left: -6px;
+    margin-top: 15px;
+}
+.form-check-label {
+    padding-right: 20px;
+}
+.modal-header .close {
+    margin: -1rem auto -1rem -1rem;
+}
+.variation-label, .addon-label {
+    text-align: right;
+}
+.cart-sidebar .cart-item .thumb {
+    margin-right: 0;
+    margin-left: 10px;
+}
+.cart-sidebar .cart-item h4.title {
+    text-align: right;
+}
+.cart-item p {
+    text-align: right;
+}
+.cart-item .details-footer .qty {
+    margin-right: 0px;
+    margin-left: 10px;
+}
+.cart-sidebar .cart-item span.qty-price {
+    direction: ltr;
+}
+.food-menu-area ul.nav {
+    text-align: right;
+}
+.checkout-area .table {
+    text-align: right;
+}
+.checkout-area .table .cart-table tbody tr td {
+    padding-left: 0;
+    padding-right: 30px;
+}
+.checkout-area form .field-label {
+    text-align: right;
+}
+.shop-title-box {
+    text-align: right;
+}
+div#shippingCharges {
+    text-align: right;
+}
+.form.shipping-info {
+    text-align: right;
+}
+.cart-total-table {
+    text-align: right;
+    padding-right: 0;
+}
+.cart-total .payment-options {
+    text-align: right;
+}
+.placeorder-button {
+    text-align: right !important;
+}
+.login-area .login-content .login-title .title {
+    text-align: right;
+}
+form#loginForm {
+    text-align: right;
+}
+.cart-icon {
+    right: auto;
+    left: 20px;
+}
+.checkout-area .coupon {
+    text-align: right;
+}
+.checkout-area .coupon:before {
+    left: auto;
+    right: 0;
+}

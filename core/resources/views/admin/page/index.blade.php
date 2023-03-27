@@ -33,13 +33,19 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Pages</a>
+        <a href="#">Website Pages</a>
       </li>
       <li class="separator">
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="#">Page Lists</a>
+        <a href="#">Custom Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
+        <a href="#">Pages</a>
       </li>
     </ul>
   </div>
@@ -75,7 +81,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
                 <h2 class="text-center">NO PAGE ADDED</h2>
               @else
                 <div class="table-responsive">
-                  <table class="table table-striped mt-3">
+                  <table class="table table-striped mt-3" id="basic-datatables">
                     <thead>
                       <tr>
                         <th scope="col">

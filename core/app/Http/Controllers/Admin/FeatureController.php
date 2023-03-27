@@ -132,4 +132,20 @@ class FeatureController extends Controller
         Session::flash('success', 'Feature deleted successfully!');
         return back();
     }
+
+    public function removeImage(Request $request) {
+        $type = $request->type;
+        $featId = $request->feature_id;
+
+        $feature = Feature::findOrFail($featId);
+
+        if ($type == "feature") {
+            @unlink("assets/front/img/features/" . $feature->image);
+            $feature->image = NULL;
+            $feature->save();
+        }
+
+        $request->session()->flash('success', 'Image removed successfully!');
+        return "success";
+    }
 }

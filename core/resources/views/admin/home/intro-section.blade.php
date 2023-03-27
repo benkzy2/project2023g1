@@ -30,6 +30,12 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
+        <a href="#">Website Pages</a>
+      </li>
+      <li class="separator">
+        <i class="flaticon-right-arrow"></i>
+      </li>
+      <li class="nav-item">
         <a href="#">Home Page</a>
       </li>
       <li class="separator">
@@ -103,13 +109,14 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="form-group">
-                      <div class="col-12 mb-2">
-                        <label for="image"><strong>Signature</strong></label>
+                      <label for="image" class="d-block"><strong>Signature</strong></label>
+                      <div class="showImage mb-3">
+                        @if (!empty($abs->intro_signature))
+                          <a class="remove-image" data-type="signature"><i class="far fa-times-circle"></i></a>
+                        @endif
+                        <img src="{{ !empty($abs->intro_signature) ? asset('assets/front/img/'.$abs->intro_signature) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
                       </div>
-                      <div class="col-md-12 intro_signature mb-3">
-                        <img src="{{ $abs->intro_signature ? asset('assets/front/img/'.$abs->intro_signature) : asset('assets/admin/img/noimage.jpg')}}" alt="..." class="img-thumbnail">
-                      </div>
-                      <input type="file" name="intro_signature" id="intro_signature" class="form-control image">
+                      <input type="file" name="intro_signature" class="form-control image">
                       <p id="errintro_signature" class="mb-0 text-danger em"></p>
                     </div>
                   </div>
@@ -165,4 +172,36 @@
     </div>
   </div>
 
+@endsection
+
+
+@section('scripts')
+<script>
+$(function ($) {
+  "use strict";
+
+    $(".remove-image").on('click', function(e) {
+        e.preventDefault();
+        $(".request-loader").addClass("show");
+
+        let type = $(this).data('type');
+        let fd = new FormData();
+        fd.append('type', type);
+        fd.append('language_id', {{$abs->language->id}});
+
+        $.ajax({
+            url: "{{route('admin.introsection.img.rmv')}}",
+            data: fd,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data == "success") {
+                    window.location = "{{url()->current() . '?language=' . $abs->language->code}}";
+                }
+            }
+        })
+    });
+});
+</script>
 @endsection

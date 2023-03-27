@@ -79,21 +79,22 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'current_password' => 'required',
+            'current_password' => 'nullable',
             'new_password' => 'required',
             'confirmation_password' => 'required',
         ]);
         $user = Auth::user();
-        if ($request->current_password) {
-            if (Hash::check($request->current_password, $user->password)) {
-                if ($request->new_password == $request->confirmation_password) {
-                    $input['password'] = Hash::make($request->new_password);
-                } else {
-                    return back()->with('err', __('Confirm password does not match.'));
-                }
-            } else {
-                return back()->with('err', __('Current password Does not match.'));
+
+        if (!empty($user->password)) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->with('error', __('Current password Does not match.'));
             }
+        }
+
+        if ($request->new_password == $request->confirmation_password) {
+            $input['password'] = Hash::make($request->new_password);
+        } else {
+            return back()->with('error', __('Confirm password does not match.'));
         }
 
         $user->update($input);
