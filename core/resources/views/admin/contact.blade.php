@@ -69,20 +69,7 @@ $selLang = \App\Models\Language::where('code', request()->input('language'))->fi
               <div class="col-lg-6 offset-lg-3">
                 @csrf
 
-                <div class="form-group">
-                  <label>Form Title **</label>
-                  <input class="form-control" name="contact_form_title" value="{{$abs->contact_form_title}}" placeholder="Enter form Titlte">
-                  @if ($errors->has('contact_form_title'))
-                    <p class="mb-0 text-danger">{{$errors->first('contact_form_title')}}</p>
-                  @endif
-                </div>
-                <div class="form-group">
-                  <label>Information Title **</label>
-                  <input class="form-control" name="contact_info_title" value="{{$abs->contact_info_title}}" placeholder="Enter Information Titlte">
-                  @if ($errors->has('contact_info_title'))
-                    <p class="mb-0 text-danger">{{$errors->first('contact_info_title')}}</p>
-                  @endif
-                </div>
+ 
 
 
                 <div class="form-group">
