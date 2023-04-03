@@ -28,7 +28,13 @@
    </div>
 </section>
 
-
+<section class="experience-area-3 pt-100 pb-90">
+   <div class="container">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+         {!! nl2br(replaceBaseUrl(convertUtf8($page->body))) !!}
+      </div>
+   </div>
+</section>
 
 
 <!--====== EXPERIENCE PART ENDS ======-->
