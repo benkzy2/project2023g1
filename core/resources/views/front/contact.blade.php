@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title-item text-center">
-                    <h2 class="title">{{convertUtf8($bs->contact_title)}}</h2>
+                    <h2 class="title">{{convertUtf8($bs->contact_titles)}}</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{route('front.index')}}"><i class="flaticon-home"></i>{{__('Home')}}</a></li>
