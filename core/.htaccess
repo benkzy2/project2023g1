@@ -1,3 +1,0 @@
-Options -Indexes
-ErrorDocument 403 "You dont have permission to access"
-deny from all
